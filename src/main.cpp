@@ -32,7 +32,7 @@
 
 void version() //show information about version/build
 {
-    std::cout << "BPL Interpreter Beta\n 16.01 Preview\n"
+    std::cout << "BPL Interpreter Beta\n 16.01\n"
               "Copyright (C) 2015 Nikita Mironov\n"
               "\n"
               "This program comes with ABSOLUTELY NO WARRANTY.\n"
@@ -50,7 +50,7 @@ void showLicense() //show terms of GNU GPL v3
 
 int main(int argc, char** argv)
 {
-    system("title BPL Interpreter 16.01 Preview");
+    system("title BPL Interpreter 16.01");
 
     Interpreter* interpreter = new Interpreter;
 

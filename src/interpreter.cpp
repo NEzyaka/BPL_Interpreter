@@ -83,7 +83,7 @@ short Interpreter::getFileCode() //getting code from file
 
 void Interpreter::parseCondition(string &line)
 {
-    string condition = line.substr(ifCondition.size());
+    string condition = line.substr(IF_BEGIN.size());
     condition = trim(condition);
     condition = condition.substr(condition.find_first_of('(')+1, condition.find_first_of(')')-1);
     condition = trim(condition);
@@ -98,7 +98,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -124,7 +124,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -168,7 +168,7 @@ void Interpreter::parseCondition(string &line)
                 trueCondition = true;
             }
         }
-        else if(tmp_variable.getType() == boolean)
+        else if(tmp_variable.getType() == BOOL)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -210,7 +210,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -236,7 +236,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -280,7 +280,7 @@ void Interpreter::parseCondition(string &line)
                 trueCondition = true;
             }
         }
-        else if(tmp_variable.getType() == boolean)
+        else if(tmp_variable.getType() == BOOL)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -323,7 +323,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -349,7 +349,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -386,7 +386,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -412,7 +412,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -449,7 +449,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -475,7 +475,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -512,7 +512,7 @@ void Interpreter::parseCondition(string &line)
 
         Variable tmp_variable = vars[varName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -538,7 +538,7 @@ void Interpreter::parseCondition(string &line)
                 }
             }
         }
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
         {
             if(vars.find(varValue) != vars.end())
             {
@@ -585,25 +585,25 @@ void Interpreter::declareVar(string &line)
 {
     bool varDeclaration = false;
     string varType = "";
-    if(line.find(integer) != string::npos) //INTEGER
+    if(line.find(INTEGER) != string::npos) //INTEGER
     {
         varDeclaration = true;
-        varType = integer;
+        varType = INTEGER;
     }
-    else if(line.find(str) != string::npos) //LINE
+    else if(line.find(LINE) != string::npos) //LINE
     {
         varDeclaration = true;
-        varType = str;
+        varType = LINE;
     }
-    else if(line.find(boolean) != string::npos) //BOOL
+    else if(line.find(BOOL) != string::npos) //BOOL
     {
         varDeclaration = true;
-        varType = boolean;
+        varType = BOOL;
     }
-    else if(line.find(doubl) != string::npos) //DOUBLE
+    else if(line.find(DOUBLE) != string::npos) //DOUBLE
     {
         varDeclaration = true;
-        varType = doubl;
+        varType = DOUBLE;
     }
 
     if(varDeclaration)
@@ -623,22 +623,22 @@ void Interpreter::declareVar(string &line)
             if(vars.find(value) != vars.end())
             {
                 Variable tmp_variable2 = vars[value];
-                if(varType == str && tmp_variable2.getType() == str) //LINE
+                if(varType == LINE && tmp_variable2.getType() == LINE) //LINE
                     tmp_variable.setString(tmp_variable2.getString());
-                else if(varType == integer && tmp_variable2.getType() == integer) //INTEGER
+                else if(varType == INTEGER && tmp_variable2.getType() == INTEGER) //INTEGER
                     tmp_variable.setInteger(tmp_variable2.getInteger());
-                else if(varType == doubl && tmp_variable2.getType() == doubl) //DOUBLE
+                else if(varType == DOUBLE && tmp_variable2.getType() == DOUBLE) //DOUBLE
                     tmp_variable.setDouble(tmp_variable2.getDouble());
-                else if(varType == boolean && tmp_variable2.getType() == boolean) //BOOL
+                else if(varType == BOOL && tmp_variable2.getType() == BOOL) //BOOL
                     tmp_variable.setBool(tmp_variable2.getBool());
             }
             else
             {
-                if(varType == str) //LINE
+                if(varType == LINE) //LINE
                 {
                     tmp_variable.setString(value);
                 }
-                else if(varType == integer) //INTEGER
+                else if(varType == INTEGER) //INTEGER
                 {
                     int intVal = 0;
 
@@ -648,7 +648,7 @@ void Interpreter::declareVar(string &line)
 
                     tmp_variable.setInteger(intVal);
                 }
-                else if(varType == doubl) //DOUBLE
+                else if(varType == DOUBLE) //DOUBLE
                 {
                     double doubleVal = 0;
 
@@ -658,7 +658,7 @@ void Interpreter::declareVar(string &line)
 
                     tmp_variable.setDouble(doubleVal);
                 }
-                else if(varType == boolean) //BOOL
+                else if(varType == BOOL) //BOOL
                 {
                     bool boolValue = false;
                     if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -689,17 +689,17 @@ void Interpreter::doBlock(vector<string>block)
     for(int i(0); i < block.size(); i++)
     {
         //conditions
-        if(block[i].find(ifCondition) != string::npos)
+        if(block[i].find(IF_BEGIN) != string::npos)
         {
             inIf = true;
             parseCondition(block[i]);
         }
-        else if(block[i] == elseCondition)
+        else if(block[i] == ELSE)
         {
             inNormalIf = false;
             inElse = true;
         }
-        else if(block[i] == endIfCondition)
+        else if(block[i] == ENDIF)
         {
             inIf = false;
             inNormalIf = false;
@@ -724,54 +724,54 @@ void Interpreter::doBlock(vector<string>block)
                 block[i] = block[i].substr(0, commentFind);
             }
 
-            if((block[i].find(integer) != string::npos) || (block[i].find(str) != string::npos) || (block[i].find(boolean) != string::npos) || (block[i].find(doubl) != string::npos))
+            if((block[i].find(INTEGER) != string::npos) || (block[i].find(LINE) != string::npos) || (block[i].find(BOOL) != string::npos) || (block[i].find(DOUBLE) != string::npos))
                 declareVar(block[i]); //declare var
 
             //Operators
-            if(block[i].find(dumpOperator) != string::npos) //DUMP
-                if(block[i].find(dumpVarOperator) != string::npos) //DUMPVAR
+            if(block[i].find(DUMP_OPERATOR) != string::npos) //DUMP
+                if(block[i].find(DUMPVAR_OPERATOR) != string::npos) //DUMPVAR
                     DUMPVAR(block[i]);
                 else DUMP(); //DUMP
-            else if(block[i].find(printOperator) != string::npos) //PRINT
+            else if(block[i].find(PRINT_OPERATOR) != string::npos) //PRINT
                 PRINT(block[i]);
-            else if(block[i].find(setValOperator) != string::npos) //SETVAL
+            else if(block[i].find(SETVAL_OPERATOR) != string::npos) //SETVAL
                 SETVAL(block[i]);
-            else if(block[i].find(inputOperator) != string::npos) //INPUTVAR
+            else if(block[i].find(INPUTVAR_OPERATOR) != string::npos) //INPUTVAR
                 INPUTVAR(block[i]);
-            else if(block[i].find(alertOperator) != string::npos) //ALERT
+            else if(block[i].find(ALERT_OPERATOR) != string::npos) //ALERT
                 ALERT();
-            else if(block[i].find(endlOperator) != string::npos) //NEXTLINE
+            else if(block[i].find(NEXTLINE_OPERATOR) != string::npos) //NEXTLINE
                 NEXTLINE();
-            else if(block[i].find(clsOperator) != string::npos) //CLEARSCREEN
+            else if(block[i].find(CLEARSCREEN_OPERATOR) != string::npos) //CLEARSCREEN
                 CLEARSCREEN();
-            else if(block[i].find(commandOperator) != string::npos) //COMMAND
+            else if(block[i].find(COMMAND_OPERATOR) != string::npos) //COMMAND
                 COMMAND(block[i]);
-            else if(block[i].find(colorOperator) != string::npos) //FONTCOLOR
+            else if(block[i].find(COLOR_OPERATOR) != string::npos) //FONTCOLOR
                 FONTCOLOR(block[i]);
-            else if(block[i].find(swapOperator) != string::npos) //SWAP
+            else if(block[i].find(SWAP_OPERATOR) != string::npos) //SWAP
                 SWAP(block[i]);
-            else if(block[i].find(deleteOperator) != string::npos) //DELETE
+            else if(block[i].find(DELETE_OPERATOR) != string::npos) //DELETE
                 DELETE(block[i]);
-            else if(block[i].find(sizeOperator) != string::npos) //SIZE
+            else if(block[i].find(SIZE_OPERATOR) != string::npos) //SIZE
                 SIZE(block[i]);
-            else if(block[i].find(doBlockOperator) != string::npos) //DOBLOCK
+            else if(block[i].find(DOBLOCK_OPERATOR) != string::npos) //DOBLOCK
                 DOBLOCK(block[i]);
-            else if(block[i].find(blockListOperator) != string::npos) //BLOCKLIST
+            else if(block[i].find(BLOCKLIST_OPERATOR) != string::npos) //BLOCKLIST
                 BLOCKLIST();
 
             //arithmetic operations with vars
-            if(block[i].find(plusOperator) != string::npos) //addition
-                add(block[i]);
-            else if(block[i].find(minusOperator) != string::npos) //subtraction
-                subtr(block[i]);
-            else if(block[i].find(multiplOperator) != string::npos) //multiplication
-                multipl(block[i]);
-            else if(block[i].find(divOperator) != string::npos) //division
-                div(block[i]);
-            else if(block[i].find(incrementOperator) != string::npos) //increment
-                increment(block[i]);
-            else if(block[i].find(decrementOperator) != string::npos) //decrement
-                decrement(block[i]);
+            if(block[i].find(ADD_OPERATOR) != string::npos) //addition
+                ADD(block[i]);
+            else if(block[i].find(SUBTRACT_OPERATOR) != string::npos) //addition
+                SUBTRACT(block[i]);
+            else if(block[i].find(MULTIPLY_OPERATOR) != string::npos) //addition
+                MULTIPLY(block[i]);
+            else if(block[i].find(DIVISE_OPERATOR) != string::npos) //addition
+                DIVISE(block[i]);
+            else if(block[i].find(INCREMENT_OPERATOR) != string::npos) //addition
+                INCREMENT(block[i]);
+            else if(block[i].find(DECREMENT_OPERATOR) != string::npos) //addition
+                DECREMENT(block[i]);
         }
     }
 }
@@ -794,7 +794,7 @@ short Interpreter::interpret()
 
         for(int i(0); i < code.size(); i++)
         {
-            if(code[i].find(importOperator) != string::npos) //IMPORT
+            if(code[i].find(IMPORT_OPERATOR) != string::npos) //IMPORT
                 IMPORT(code[i]);
 
             if(code[i].find(beginBlock) != string::npos)

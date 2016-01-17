@@ -57,4 +57,4 @@ private:
 
 };
 
-#endif // ARIABLE_H
+#endif // VARIABLE_H

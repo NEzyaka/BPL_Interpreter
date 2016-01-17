@@ -43,11 +43,10 @@ public:
 private:
     bool fileIsEmpty = true;
 
-    //reading errors
+    /// errors
     const string FILE_IS_EMPTY = "File is empty!\n";
     const string READ_ERROR = "Read error!\n";
 
-    //operators errors
     const string PRINT_ERROR = "PRINT operator error!\n";
     const string INPUTVAR_ERROR = "INPUTVAR operator error!\n";
     const string DUMP_ERROR = "DUMP operator error!\n";
@@ -59,84 +58,90 @@ private:
     const string SIZE_ERROR = "SIZE operator error!\n";
     const string SETVAL_ERROR = "SETVAL operator error!\n";
 
-    //interpreter errors
+    struct errorPosition
+    {
+        unsigned short line = 0;
+        unsigned short column = 0;
+    };
+
+    /// interpreter errors
     const string ARITHMETIC_ERROR = "Arithmetic operation error!\n";
     const string DECLARATION_ERROR = "Variable declaration error!\n";
     const string CONDITION_ERROR = "Condition error!\n";
 
-    //operators
-    const string printOperator = "PRINT";
-    const string inputOperator = "INPUTVAR";
-    const string alertOperator = "ALERT";
-    const string endlOperator = "NEXTLINE";
-    const string clsOperator = "CLEARSCREEN";
-    const string dumpOperator = "DUMP";
-    const string dumpVarOperator = "DUMPVAR";
-    const string commandOperator = "COMMAND";
-    const string colorOperator = "FONTCOLOR";
-    const string swapOperator = "SWAP";
-    const string deleteOperator = "DELETE";
-    const string sizeOperator = "SIZE";
-    const string setValOperator = "SETVAL";
-    const string doBlockOperator = "DOBLOCK";
-    const string blockListOperator = "BLOCKLIST";
-    const string importOperator = "IMPORT";
+    /// operators
+    const string PRINT_OPERATOR = "PRINT";
+    const string INPUTVAR_OPERATOR = "INPUTVAR";
+    const string ALERT_OPERATOR = "ALERT";
+    const string NEXTLINE_OPERATOR = "NEXTLINE";
+    const string CLEARSCREEN_OPERATOR = "CLEARSCREEN";
+    const string DUMP_OPERATOR = "DUMP";
+    const string DUMPVAR_OPERATOR = "DUMPVAR";
+    const string COMMAND_OPERATOR = "COMMAND";
+    const string COLOR_OPERATOR = "FONTCOLOR";
+    const string SWAP_OPERATOR = "SWAP";
+    const string DELETE_OPERATOR = "DELETE";
+    const string SIZE_OPERATOR = "SIZE";
+    const string SETVAL_OPERATOR = "SETVAL";
+    const string DOBLOCK_OPERATOR = "DOBLOCK";
+    const string BLOCKLIST_OPERATOR = "BLOCKLIST";
+    const string IMPORT_OPERATOR = "IMPORT";
 
-    void PRINT(string& arg);
-    void INPUTVAR(string& arg);
+    void PRINT(string& line);
+    void INPUTVAR(string& line);
     void ALERT();
     void NEXTLINE();
     void CLEARSCREEN();
     void DUMP();
-    void DUMPVAR(string& arg);
-    void PRINTVAR(string& arg);
-    void COMMAND(string& arg);
-    void FONTCOLOR(string& arg);
-    void SWAP(string& arg);
-    void DELETE(string& arg);
-    void SIZE(string& arg);
-    void SETVAL(string& arg);
-    void DOBLOCK(string& arg);
+    void DUMPVAR(string& line);
+    void PRINTVAR(string& line);
+    void COMMAND(string& line);
+    void FONTCOLOR(string& line);
+    void SWAP(string& line);
+    void DELETE(string& line);
+    void SIZE(string& line);
+    void SETVAL(string& line);
+    void DOBLOCK(string& line);
     void BLOCKLIST();
-    void IMPORT(string& file);
+    void IMPORT(string& line);
 
-    //arithmetic
-    const string plusOperator = "+=";
-    const string minusOperator = "-=";
-    const string multiplOperator = "*=";
-    const string divOperator = "/=";
-    const string incrementOperator = "++";
-    const string decrementOperator = "--";
+    /// arithmetic
+    const string ADD_OPERATOR = "ADD";
+    const string SUBTRACT_OPERATOR = "SUBTRACT";
+    const string MULTIPLY_OPERATOR = "MULTIPLY";
+    const string DIVISE_OPERATOR = "DIVISE";
+    const string INCREMENT_OPERATOR = "+";
+    const string DECREMENT_OPERATOR = "-";
 
-    void add(string& line);
-    void subtr(string& line);
-    void multipl(string& line);
-    void div(string& line);
-    void increment(string& line);
-    void decrement(string& line);
+    void ADD(string line);
+    void SUBTRACT(string line);
+    void MULTIPLY(string line);
+    void DIVISE(string line);
+    void INCREMENT(string line);
+    void DECREMENT(string line);
 
-    //variables
-    const string integer = "INTEGER";
-    const string str = "LINE";
-    const string boolean = "BOOL";
-    const string doubl = "DOUBLE";
+    /// variables
+    const string INTEGER = "INTEGER";
+    const string LINE = "LINE";
+    const string BOOL = "BOOL";
+    const string DOUBLE = "DOUBLE";
     map<string, Variable> vars;
     map<string, string> mustInputVars;
     void declareVar(string& line);
 
-    //comments
+    /// comments
     const string singleLineComment = "//";
 
-    //getting of code
+    /// getting of code
     string readCode(istream& in);
     string inputLine;
     vector<string>code;
     short getFileCode();
 
-    //conditions
-    const string ifCondition = "IF";
-    const string elseCondition = "ELSE";
-    const string endIfCondition = "ENDIF";
+    /// conditions
+    const string IF_BEGIN = "IF";
+    const string ELSE = "ELSE";
+    const string ENDIF = "ENDIF";
     bool inIf = false;
     bool inNormalIf = false;
     bool inElse = false;
@@ -144,7 +149,7 @@ private:
     bool trueCondition = false;
     void parseCondition(string& line);
 
-    //cycles
+    /// cycles
     const string forCycle = "FOR";
     const string endForCycle = "ENDFOR";
     bool inFor = false;
@@ -153,7 +158,7 @@ private:
     int currentIndex = 0;
     vector<string>forBlock;
 
-    //blocks
+    /// blocks
     void doBlock(vector<string>block);
     map<string, vector<string> >blocks;
     vector<string>blockNames;

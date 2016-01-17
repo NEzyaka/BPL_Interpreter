@@ -34,15 +34,15 @@
 
 //operators
 
-void Interpreter::PRINT(string &arg) //PRINT
+void Interpreter::PRINT(string& line) //PRINT
 {
-    arg = arg.substr(arg.find_first_of(' '));
-    arg = trim(arg);
-    if(arg.find('"') != string::npos)
+    line = line.substr(line.find_first_of(' '));
+    line = trim(line);
+    if(line.find('"') != string::npos)
     {
-        if(arg.find_first_of('"') != arg.find_last_of('"'))
+        if(line.find_first_of('"') != line.find_last_of('"'))
         {
-            string printValue = trim(arg);
+            string printValue = trim(line);
             if((printValue.find_first_of('+') == printValue.find_last_of('+')) != string::npos)
             {
                 if(printValue.find('+') < printValue.find_first_of('"'))
@@ -53,13 +53,13 @@ void Interpreter::PRINT(string &arg) //PRINT
                     {
                         Variable v = vars[varName];
 
-                        if(v.getType() == str)
+                        if(v.getType() == LINE)
                             cout << v.getString();
-                        else if(v.getType() == integer)
+                        else if(v.getType() == INTEGER)
                             cout << v.getInteger();
-                        else if(v.getType() == doubl)
+                        else if(v.getType() == DOUBLE)
                             cout << v.getDouble();
-                        else if(v.getType() == boolean)
+                        else if(v.getType() == BOOL)
                             cout << (v.getBool() == true ? "TRUE" : "FALSE");
                     }
 
@@ -84,13 +84,13 @@ void Interpreter::PRINT(string &arg) //PRINT
                     {
                         Variable v = vars[varName];
 
-                        if(v.getType() == str)
+                        if(v.getType() == LINE)
                             cout << v.getString();
-                        else if(v.getType() == integer)
+                        else if(v.getType() == INTEGER)
                             cout << v.getInteger();
-                        else if(v.getType() == doubl)
+                        else if(v.getType() == DOUBLE)
                             cout << v.getDouble();
-                        else if( v.getType() == boolean)
+                        else if( v.getType() == BOOL)
                             cout << (v.getBool() == true ? "TRUE" : "FALSE");
                     }
                 }
@@ -106,32 +106,32 @@ void Interpreter::PRINT(string &arg) //PRINT
         }
         cout << "\n";
     }
-    else if(vars.find(trim(arg)) != vars.end())
+    else if(vars.find(trim(line)) != vars.end())
     {
-        Variable v = vars[trim(arg)];
+        Variable v = vars[trim(line)];
 
-        if(v.getType() == str)
+        if(v.getType() == LINE)
             cout << v.getString() << endl;
-        else if(v.getType() == integer)
+        else if(v.getType() == INTEGER)
             cout << v.getInteger() << endl;
-        else if(v.getType() == doubl)
+        else if(v.getType() == DOUBLE)
             cout << v.getDouble() << endl;
-        else if( v.getType() == boolean)
+        else if( v.getType() == BOOL)
             cout << (v.getBool() == true ? "TRUE" : "FALSE") << endl;
     }
-    else if(isNum(arg))
+    else if(isNum(line))
     {
         int buf = 0;
-        stringstream convert(arg);
+        stringstream convert(line);
         convert >> buf;
         convert.flush();
         cout << buf;
     }
 }
 
-void Interpreter::INPUTVAR(string& arg) //INPUTVAR
+void Interpreter::INPUTVAR(string& line) //INPUTVAR
 {
-    string varName = arg.substr(inputOperator.size());
+    string varName = line.substr(INPUTVAR_OPERATOR.size());
     varName = trim(varName);
 
     if(!varName.empty())
@@ -159,11 +159,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     getline(cin, value);
 
-                    if(varType == str) //LINE
+                    if(varType == LINE) //LINE
                     {
                         tmp_variable.setString(value);
                     }
-                    else if(varType == integer) //INTEGER
+                    else if(varType == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -173,7 +173,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setInteger(intVal);
                     }
-                    else if(varType == doubl) //DOUBLE
+                    else if(varType == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -183,7 +183,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setDouble(doubleVal);
                     }
-                    else if(varType == boolean) //BOOL
+                    else if(varType == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -210,11 +210,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     getline(cin, value2);
 
-                    if(varType == str) //LINE
+                    if(varType == LINE) //LINE
                     {
                         tmp_variable2.setString(value2);
                     }
-                    else if(varType == integer) //INTEGER
+                    else if(varType == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -224,7 +224,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setInteger(intVal);
                     }
-                    else if(varType == doubl) //DOUBLE
+                    else if(varType == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -234,7 +234,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setDouble(doubleVal);
                     }
-                    else if(varType == boolean) //BOOL
+                    else if(varType == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
@@ -260,11 +260,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
                     cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
                     getline(cin, value);
 
-                    if(tmp_variable.getType() == str) //LINE
+                    if(tmp_variable.getType() == LINE) //LINE
                     {
                         tmp_variable.setString(value);
                     }
-                    else if(tmp_variable.getType() == integer) //INTEGER
+                    else if(tmp_variable.getType() == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -274,7 +274,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setInteger(intVal);
                     }
-                    else if(tmp_variable.getType() == doubl) //DOUBLE
+                    else if(tmp_variable.getType() == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -284,7 +284,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setDouble(doubleVal);
                     }
-                    else if(tmp_variable.getType() == boolean) //BOOL
+                    else if(tmp_variable.getType() == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -308,11 +308,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
                     cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
                     getline(cin, value2);
 
-                    if(tmp_variable2.getType() == str) //LINE
+                    if(tmp_variable2.getType() == LINE) //LINE
                     {
                         tmp_variable2.setString(value2);
                     }
-                    else if(tmp_variable2.getType() == integer) //INTEGER
+                    else if(tmp_variable2.getType() == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -322,7 +322,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setInteger(intVal);
                     }
-                    else if(tmp_variable2.getType() == doubl) //DOUBLE
+                    else if(tmp_variable2.getType() == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -332,7 +332,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setDouble(doubleVal);
                     }
-                    else if(tmp_variable2.getType() == boolean) //BOOL
+                    else if(tmp_variable2.getType() == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
@@ -361,11 +361,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     getline(cin, value);
 
-                    if(varType == str) //LINE
+                    if(varType == LINE) //LINE
                     {
                         tmp_variable.setString(value);
                     }
-                    else if(varType == integer) //INTEGER
+                    else if(varType == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -375,7 +375,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setInteger(intVal);
                     }
-                    else if(varType == doubl) //DOUBLE
+                    else if(varType == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -385,7 +385,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setDouble(doubleVal);
                     }
-                    else if(varType == boolean) //BOOL
+                    else if(varType == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -409,11 +409,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
                     cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
                     getline(cin, value2);
 
-                    if(tmp_variable2.getType() == str) //LINE
+                    if(tmp_variable2.getType() == LINE) //LINE
                     {
                         tmp_variable2.setString(value2);
                     }
-                    else if(tmp_variable2.getType() == integer) //INTEGER
+                    else if(tmp_variable2.getType() == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -423,7 +423,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setInteger(intVal);
                     }
-                    else if(tmp_variable2.getType() == doubl) //DOUBLE
+                    else if(tmp_variable2.getType() == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -433,7 +433,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setDouble(doubleVal);
                     }
-                    else if(tmp_variable2.getType() == boolean) //BOOL
+                    else if(tmp_variable2.getType() == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
@@ -459,11 +459,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
                     cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
                     getline(cin, value);
 
-                    if(tmp_variable.getType() == str) //LINE
+                    if(tmp_variable.getType() == LINE) //LINE
                     {
                         tmp_variable.setString(value);
                     }
-                    else if(tmp_variable.getType() == integer) //INTEGER
+                    else if(tmp_variable.getType() == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -473,7 +473,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setInteger(intVal);
                     }
-                    else if(tmp_variable.getType() == doubl) //DOUBLE
+                    else if(tmp_variable.getType() == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -483,7 +483,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable.setDouble(doubleVal);
                     }
-                    else if(tmp_variable.getType() == boolean) //BOOL
+                    else if(tmp_variable.getType() == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -510,11 +510,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     getline(cin, value2);
 
-                    if(varType == str) //LINE
+                    if(varType == LINE) //LINE
                     {
                         tmp_variable2.setString(value2);
                     }
-                    else if(varType == integer) //INTEGER
+                    else if(varType == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
@@ -524,7 +524,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setInteger(intVal);
                     }
-                    else if(varType == doubl) //DOUBLE
+                    else if(varType == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
@@ -534,7 +534,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                         tmp_variable2.setDouble(doubleVal);
                     }
-                    else if(varType == boolean) //BOOL
+                    else if(varType == BOOL) //BOOL
                     {
                         bool boolValue = false;
                         if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
@@ -566,11 +566,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                 getline(cin, value);
 
-                if(varType == str) //LINE
+                if(varType == LINE) //LINE
                 {
                     tmp_variable.setString(value);
                 }
-                else if(varType == integer) //INTEGER
+                else if(varType == INTEGER) //INTEGER
                 {
                     int intVal = 0;
 
@@ -580,7 +580,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     tmp_variable.setInteger(intVal);
                 }
-                else if(varType == doubl) //DOUBLE
+                else if(varType == DOUBLE) //DOUBLE
                 {
                     double doubleVal = 0;
 
@@ -590,7 +590,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     tmp_variable.setDouble(doubleVal);
                 }
-                else if(varType == boolean) //BOOL
+                else if(varType == BOOL) //BOOL
                 {
                     bool boolValue = false;
                     if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -616,11 +616,11 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                 getline(cin, value);
 
-                if(tmp_variable.getType() == str) //LINE
+                if(tmp_variable.getType() == LINE) //LINE
                 {
                     tmp_variable.setString(value);
                 }
-                else if(tmp_variable.getType() == integer) //INTEGER
+                else if(tmp_variable.getType() == INTEGER) //INTEGER
                 {
                     int intVal = 0;
 
@@ -630,7 +630,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     tmp_variable.setInteger(intVal);
                 }
-                else if(tmp_variable.getType() == doubl) //DOUBLE
+                else if(tmp_variable.getType() == DOUBLE) //DOUBLE
                 {
                     double doubleVal = 0;
 
@@ -640,7 +640,7 @@ void Interpreter::INPUTVAR(string& arg) //INPUTVAR
 
                     tmp_variable.setDouble(doubleVal);
                 }
-                else if(tmp_variable.getType() == boolean) //BOOL
+                else if(tmp_variable.getType() == BOOL) //BOOL
                 {
                     bool boolValue = false;
                     if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
@@ -687,20 +687,20 @@ void Interpreter::DUMP() //DUMP
 
         Variable v = iter->second;
 
-        if(v.getType() == str)
+        if(v.getType() == LINE)
             cout << v.getString() << " [LINE, length: " << v.getString().size() << " symbols, size: " << sizeof(v.getString()) << " bytes]" << endl;
-        else if(v.getType() == integer)
+        else if(v.getType() == INTEGER)
             cout << v.getInteger() << " [INTEGER, size: " << sizeof(v.getInteger()) << " bytes]" << endl;
-        else if(v.getType() == doubl)
+        else if(v.getType() == DOUBLE)
             cout << v.getDouble() << " [DOUBLE, size: " << sizeof(v.getDouble()) << " bytes]" << endl;
-        else if(v.getType() == boolean)
+        else if(v.getType() == BOOL)
             cout << (v.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(v.getBool()) << " bytes]" << endl;
     }
 }
 
-void Interpreter::DUMPVAR(string& arg) //DUMPVAR
+void Interpreter::DUMPVAR(string& line) //DUMPVAR
 {
-    string varName = arg.substr(dumpVarOperator.size());
+    string varName = line.substr(DUMPVAR_OPERATOR.size());
     varName = trim(varName);
 
     if(!varName.empty())
@@ -729,23 +729,23 @@ void Interpreter::DUMPVAR(string& arg) //DUMPVAR
                 if(!secondVarName.empty())
                     tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() == str)
+                if(tmp_variable.getType() == LINE)
                     cout << firstVarName << " -> " << tmp_variable.getString() << " [LINE, length: " << tmp_variable.getString().size() << " symbols, size: " << sizeof(tmp_variable.getString()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == integer)
+                else if(tmp_variable.getType() == INTEGER)
                     cout << firstVarName << " -> " << tmp_variable.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable.getInteger()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == doubl)
+                else if(tmp_variable.getType() == DOUBLE)
                     cout << firstVarName << " -> " << tmp_variable.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable.getDouble()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == boolean)
+                else if(tmp_variable.getType() == BOOL)
                     cout << firstVarName << " -> " << (tmp_variable.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable.getBool()) << " bytes]" << endl;
 
 
-                if(tmp_variable2.getType() == str)
+                if(tmp_variable2.getType() == LINE)
                     cout << secondVarName << " -> " << tmp_variable2.getString() << " [LINE, length: " << tmp_variable2.getString().size() << " symbols, size: " << sizeof(tmp_variable2.getString()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == integer)
+                else if(tmp_variable2.getType() == INTEGER)
                     cout << secondVarName << " -> " << tmp_variable2.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable2.getInteger()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == doubl)
+                else if(tmp_variable2.getType() == DOUBLE)
                     cout << secondVarName << " -> " << tmp_variable2.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable2.getDouble()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == boolean)
+                else if(tmp_variable2.getType() == BOOL)
                     cout << secondVarName << " -> " << (tmp_variable2.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable2.getBool()) << " bytes]" << endl;
             }
         }
@@ -753,21 +753,21 @@ void Interpreter::DUMPVAR(string& arg) //DUMPVAR
         {
             Variable v = vars[varName];
 
-            if(v.getType() == str)
+            if(v.getType() == LINE)
                 cout << varName << " -> " << v.getString() << " [LINE, length: " << v.getString().size() << " symbols, size: " << sizeof(v.getString()) << " bytes]" << endl;
-            else if(v.getType() == integer)
+            else if(v.getType() == INTEGER)
                 cout << varName << " -> " << v.getInteger() << " [INTEGER, size: " << sizeof(v.getInteger()) << " bytes]" << endl;
-            else if(v.getType() == doubl)
+            else if(v.getType() == DOUBLE)
                 cout << varName << " -> " << v.getDouble() << " [DOUBLE, size: " << sizeof(v.getDouble()) << " bytes]" << endl;
-            else if(v.getType() == boolean)
+            else if(v.getType() == BOOL)
                 cout << varName << " -> " << (v.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(v.getBool()) << " bytes]" << endl;
         }
     }
 }
 
-void Interpreter::COMMAND(string& arg) //COMMAND
+void Interpreter::COMMAND(string& line) //COMMAND
 {
-    string val = arg.substr(commandOperator.size());
+    string val = line.substr(COMMAND_OPERATOR.size());
     if(!val.empty())
     {
         string argValue = "start " + val;
@@ -779,9 +779,9 @@ void Interpreter::COMMAND(string& arg) //COMMAND
     }
 }
 
-void Interpreter::FONTCOLOR(string& arg) //FONTCOLOR
+void Interpreter::FONTCOLOR(string& line) //FONTCOLOR
 {
-    string colorValue = arg.substr(colorOperator.size());
+    string colorValue = line.substr(COLOR_OPERATOR.size());
     colorValue = trim(colorValue);
 
     if(!colorValue.empty())
@@ -824,18 +824,15 @@ void Interpreter::FONTCOLOR(string& arg) //FONTCOLOR
     }
 }
 
-void Interpreter::SWAP(string& arg) //SWAP
+void Interpreter::SWAP(string& line) //SWAP
 {
-    string varNames = arg.substr(swapOperator.size());
-    varNames = trim(varNames);
-
-    if(!varNames.empty())
+    if(!line.empty())
     {
-        size_t dotPosition = varNames.find(',');
-        string firstVarName = varNames.substr(0, dotPosition);
+        size_t operatorPosition = line.find(SWAP_OPERATOR);
+        string firstVarName = line.substr(0, operatorPosition);
         firstVarName = trim(firstVarName);
 
-        string secondVarName = varNames.substr(dotPosition+2);
+        string secondVarName = line.substr(SWAP_OPERATOR.size()+1);
         secondVarName = trim(secondVarName);
 
         if(!firstVarName.empty() && !secondVarName.empty())
@@ -843,7 +840,7 @@ void Interpreter::SWAP(string& arg) //SWAP
             Variable tmp_variable = vars[firstVarName];
             Variable tmp_variable2 = vars[secondVarName];
 
-            if(tmp_variable.getType() == integer && tmp_variable2.getType() == integer)
+            if(tmp_variable.getType() == INTEGER && tmp_variable2.getType() == INTEGER)
             {
                 int firstVal = tmp_variable.getInteger();
                 int secondVal = tmp_variable2.getInteger();
@@ -851,7 +848,7 @@ void Interpreter::SWAP(string& arg) //SWAP
                 tmp_variable.setInteger(secondVal);
                 tmp_variable2.setInteger(firstVal);
             }
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE && tmp_variable2.getType() == DOUBLE)
             {
                 double firstVal = tmp_variable.getDouble();
                 double secondVal = tmp_variable2.getDouble();
@@ -859,7 +856,7 @@ void Interpreter::SWAP(string& arg) //SWAP
                 tmp_variable.setDouble(secondVal);
                 tmp_variable2.setDouble(firstVal);
             }
-            else if(tmp_variable.getType() == str && tmp_variable2.getType() == str)
+            else if(tmp_variable.getType() == LINE && tmp_variable2.getType() == LINE)
             {
                 string firstVal = tmp_variable.getString();
                 string secondVal = tmp_variable2.getString();
@@ -867,7 +864,7 @@ void Interpreter::SWAP(string& arg) //SWAP
                 tmp_variable.setString(secondVal);
                 tmp_variable2.setString(firstVal);
             }
-            else if(tmp_variable.getType() == boolean && tmp_variable2.getType() == boolean)
+            else if(tmp_variable.getType() == BOOL && tmp_variable2.getType() == BOOL)
             {
                 bool firstVal = tmp_variable.getBool();
                 bool secondVal = tmp_variable2.getBool();
@@ -885,9 +882,9 @@ void Interpreter::SWAP(string& arg) //SWAP
     }
 }
 
-void Interpreter::DELETE(string& arg) //DELETE
+void Interpreter::DELETE(string& line) //DELETE
 {
-    string varName = arg.substr(deleteOperator.size());
+    string varName = line.substr(DELETE_OPERATOR.size());
     varName = trim(varName);
 
     if(!varName.empty())
@@ -926,9 +923,9 @@ void Interpreter::DELETE(string& arg) //DELETE
     }
 }
 
-void Interpreter::SIZE(string& arg) //SIZE
+void Interpreter::SIZE(string& line) //SIZE
 {
-    string varName = arg.substr(sizeOperator.size());
+    string varName = line.substr(SIZE_OPERATOR.size());
     varName = trim(varName);
 
     if(!varName.empty())
@@ -938,31 +935,27 @@ void Interpreter::SIZE(string& arg) //SIZE
             Variable tmp_variable = vars[varName];
 
             cout << "\n";
-            if(tmp_variable.getType() == integer)
+            if(tmp_variable.getType() == INTEGER)
                 cout << sizeof(tmp_variable.getInteger()) << " bytes";
-            else if(tmp_variable.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE)
                 cout << sizeof(tmp_variable.getDouble()) << " bytes";
-            else if(tmp_variable.getType() == str)
+            else if(tmp_variable.getType() == LINE)
                 cout << sizeof(tmp_variable.getString()) << " bytes";
-            else if(tmp_variable.getType() == boolean)
+            else if(tmp_variable.getType() == BOOL)
                 cout << sizeof(tmp_variable.getBool()) << " bytes";
         }
     }
 }
 
-void Interpreter::SETVAL(string& arg) //SETVAL
+void Interpreter::SETVAL(string& line) //SETVAL
 {
-    string line = arg.substr(setValOperator.size());
-    line = trim(line);
-
     if(!line.empty())
     {
-        size_t spacePosition = line.find_last_of(' ');
-
-        string varName = line.substr(0, spacePosition);
+        size_t operatorPosition = line.find(SETVAL_OPERATOR);
+        string varName = line.substr(0, operatorPosition);
         varName = trim(varName);
 
-        string varVal = line.substr(spacePosition);
+        string varVal = line.substr(SETVAL_OPERATOR.size()+1);
         varVal = trim(varVal);
 
         if(mustInputVars.find(varName) != mustInputVars.end())
@@ -971,11 +964,11 @@ void Interpreter::SETVAL(string& arg) //SETVAL
             Variable tmp_variable;
             tmp_variable.setType(varType);
 
-            if(varType == str) //LINE
+            if(varType == LINE) //LINE
             {
                 tmp_variable.setString(varVal);
             }
-            else if(varType == integer) //INTEGER
+            else if(varType == INTEGER) //INTEGER
             {
                 int intVal = 0;
 
@@ -985,7 +978,7 @@ void Interpreter::SETVAL(string& arg) //SETVAL
 
                 tmp_variable.setInteger(intVal);
             }
-            else if(varType == doubl) //DOUBLE
+            else if(varType == DOUBLE) //DOUBLE
             {
                 double doubleVal = 0;
 
@@ -995,7 +988,7 @@ void Interpreter::SETVAL(string& arg) //SETVAL
 
                 tmp_variable.setDouble(doubleVal);
             }
-            else if(varType == boolean) //BOOL
+            else if(varType == BOOL) //BOOL
             {
                 bool boolValue = false;
                 if(strstr(varVal.c_str(), "TRUE") || strstr(varVal.c_str(), "true"))
@@ -1016,11 +1009,11 @@ void Interpreter::SETVAL(string& arg) //SETVAL
         {
             Variable tmp_variable = vars[varName];
 
-            if(tmp_variable.getType() == str) //LINE
+            if(tmp_variable.getType() == LINE) //LINE
             {
                 tmp_variable.setString(varVal);
             }
-            else if(tmp_variable.getType() == integer) //INTEGER
+            else if(tmp_variable.getType() == INTEGER) //INTEGER
             {
                 int intVal = 0;
 
@@ -1030,7 +1023,7 @@ void Interpreter::SETVAL(string& arg) //SETVAL
 
                 tmp_variable.setInteger(intVal);
             }
-            else if(tmp_variable.getType() == doubl) //DOUBLE
+            else if(tmp_variable.getType() == DOUBLE) //DOUBLE
             {
                 double doubleVal = 0;
 
@@ -1040,7 +1033,7 @@ void Interpreter::SETVAL(string& arg) //SETVAL
 
                 tmp_variable.setDouble(doubleVal);
             }
-            else if(tmp_variable.getType() == boolean) //BOOL
+            else if(tmp_variable.getType() == BOOL) //BOOL
             {
                 bool boolValue = false;
                 if(strstr(varVal.c_str(), "TRUE") || strstr(varVal.c_str(), "true"))
@@ -1060,20 +1053,20 @@ void Interpreter::SETVAL(string& arg) //SETVAL
     }
 }
 
-void Interpreter::DOBLOCK(string& arg) //DOBLOCK
+void Interpreter::DOBLOCK(string& line) //DOBLOCK
 {
-    arg = arg.substr(arg.find_first_of(' '));
-    arg = trim(arg);
+    line = line.substr(line.find_first_of(' '));
+    line = trim(line);
 
     map<string, vector<string> >::const_iterator iter;
     for(iter = blocks.begin(); iter != blocks.end(); iter++)
     {
-        if(iter->first == arg)
+        if(iter->first == line)
             doBlock(iter->second);
     }
 }
 
-void Interpreter::BLOCKLIST()
+void Interpreter::BLOCKLIST() //BLOCKLIST
 {
     map<string, vector<string> >::const_iterator iter;
     int ix = 1;
@@ -1090,7 +1083,7 @@ void Interpreter::BLOCKLIST()
     }
 }
 
-void Interpreter::IMPORT(string& file)
+void Interpreter::IMPORT(string& file) //IMPORT
 {
     file = file.substr(file.find_first_of(' '));
     file = trim(file);
@@ -1107,16 +1100,16 @@ void Interpreter::IMPORT(string& file)
 
 //arithmetic operations with vars
 
-void Interpreter::add(string &line) //addition
+void Interpreter::ADD(string line) //addition
 {
     Variable tmp_variable;
     Variable tmp_variable2;
 
-    size_t plusPosition = line.find('+');
-    string firstVarName = line.substr(0, plusPosition);
+    size_t operatorPosition = line.find(ADD_OPERATOR);
+    string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(plusPosition+2);
+    string secondVarName = line.substr(ADD_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1130,9 +1123,9 @@ void Interpreter::add(string &line) //addition
         {
             tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() == integer)
+            if(tmp_variable.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() + tmp_variable.getInteger());
-            else if(tmp_variable.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() + tmp_variable.getDouble());
         }
         else
@@ -1140,23 +1133,19 @@ void Interpreter::add(string &line) //addition
             tmp_variable = vars[firstVarName];
             tmp_variable2 = vars[secondVarName];
 
-            if(tmp_variable.getType() == integer && tmp_variable2.getType() == integer)
+            if(tmp_variable.getType() == INTEGER && tmp_variable2.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() + tmp_variable2.getInteger());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE && tmp_variable2.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() + tmp_variable2.getDouble());
-            /*else if(tmp_variable.getType() == integer && tmp_variable2.getType() == doubl)
-                tmp_variable.setInteger((double)tmp_variable.getInteger() + tmp_variable2.getDouble());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == integer)
-                tmp_variable.setInteger(tmp_variable.getInteger() + (double)tmp_variable2.getInteger());*/
         }
     }
     else //variable + number
     {
         tmp_variable = vars[firstVarName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
             tmp_variable.setInteger(tmp_variable.getInteger() + plusVal);
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
             tmp_variable.setDouble(tmp_variable.getDouble() + plusVal);
     }
 
@@ -1164,16 +1153,16 @@ void Interpreter::add(string &line) //addition
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
 }
 
-void Interpreter::subtr(string &line) //subtraction
+void Interpreter::SUBTRACT(string line) //subtraction
 {
     Variable tmp_variable;
     Variable tmp_variable2;
 
-    size_t minusPosition = line.find('-');
-    string firstVarName = line.substr(0, minusPosition);
+    size_t operatorPosition = line.find(SUBTRACT_OPERATOR);
+    string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(minusPosition+2);
+    string secondVarName = line.substr(SUBTRACT_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1187,9 +1176,9 @@ void Interpreter::subtr(string &line) //subtraction
         {
             tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() == integer)
+            if(tmp_variable.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() - tmp_variable.getInteger());
-            else if(tmp_variable.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() - tmp_variable.getDouble());
         }
         else
@@ -1197,23 +1186,19 @@ void Interpreter::subtr(string &line) //subtraction
             tmp_variable = vars[firstVarName];
             tmp_variable2 = vars[secondVarName];
 
-            if(tmp_variable.getType() == integer && tmp_variable2.getType() == integer)
+            if(tmp_variable.getType() == INTEGER && tmp_variable2.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() - tmp_variable2.getInteger());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE && tmp_variable2.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() - tmp_variable2.getDouble());
-            /*else if(tmp_variable.getType() == integer && tmp_variable2.getType() == doubl)
-                tmp_variable.setInteger((double)tmp_variable.getInteger() - tmp_variable2.getDouble());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == integer)
-                tmp_variable.setInteger(tmp_variable.getInteger() - (double)tmp_variable2.getInteger());*/
         }
     }
     else //variable - number
     {
         tmp_variable = vars[firstVarName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
             tmp_variable.setInteger(tmp_variable.getInteger() - subtrVal);
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
             tmp_variable.setDouble(tmp_variable.getDouble() - subtrVal);
     }
 
@@ -1221,16 +1206,16 @@ void Interpreter::subtr(string &line) //subtraction
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
 }
 
-void Interpreter::multipl(string &line) //mulriplication
+void Interpreter::MULTIPLY(string line) //multiplication
 {
     Variable tmp_variable;
     Variable tmp_variable2;
 
-    size_t umnozhPosition = line.find('*');
-    string firstVarName = line.substr(0, umnozhPosition);
+   size_t operatorPosition = line.find(MULTIPLY_OPERATOR);
+    string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(umnozhPosition+2);
+    string secondVarName = line.substr(MULTIPLY_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1244,9 +1229,9 @@ void Interpreter::multipl(string &line) //mulriplication
         {
             tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() == integer)
+            if(tmp_variable.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() * tmp_variable.getInteger());
-            else if(tmp_variable.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() * tmp_variable.getDouble());
         }
         else
@@ -1254,23 +1239,19 @@ void Interpreter::multipl(string &line) //mulriplication
             tmp_variable = vars[firstVarName];
             tmp_variable2 = vars[secondVarName];
 
-            if(tmp_variable.getType() == integer && tmp_variable2.getType() == integer)
+            if(tmp_variable.getType() == INTEGER && tmp_variable2.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() * tmp_variable2.getInteger());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE && tmp_variable2.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() * tmp_variable2.getDouble());
-            /*else if(tmp_variable.getType() == integer && tmp_variable2.getType() == doubl)
-                tmp_variable.setInteger((double)tmp_variable.getInteger() * tmp_variable2.getDouble());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == integer)
-                tmp_variable.setInteger(tmp_variable.getInteger() * (double)tmp_variable2.getInteger());*/
         }
     }
     else //variable * number
     {
         tmp_variable = vars[firstVarName];
 
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
             tmp_variable.setInteger(tmp_variable.getInteger() * multiplVal);
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
             tmp_variable.setDouble(tmp_variable.getDouble() * multiplVal);
     }
 
@@ -1278,16 +1259,16 @@ void Interpreter::multipl(string &line) //mulriplication
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
 }
 
-void Interpreter::div(string &line) //division
+void Interpreter::DIVISE(string line) //division
 {
     Variable tmp_variable;
     Variable tmp_variable2;
 
-    size_t delPosition = line.find('/');
-    string firstVarName = line.substr(0, delPosition);
+    size_t operatorPosition = line.find(DIVISE_OPERATOR);
+    string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(delPosition+2);
+    string secondVarName = line.substr(DIVISE_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1301,9 +1282,9 @@ void Interpreter::div(string &line) //division
         {
             tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() == integer)
+            if(tmp_variable.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() / tmp_variable.getInteger());
-            else if(tmp_variable.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() / tmp_variable.getDouble());
         }
         else
@@ -1311,22 +1292,18 @@ void Interpreter::div(string &line) //division
             tmp_variable = vars[firstVarName];
             tmp_variable2 = vars[secondVarName];
 
-            if(tmp_variable.getType() == integer && tmp_variable2.getType() == integer)
+            if(tmp_variable.getType() == INTEGER && tmp_variable2.getType() == INTEGER)
                 tmp_variable.setInteger(tmp_variable.getInteger() / tmp_variable2.getInteger());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == doubl)
+            else if(tmp_variable.getType() == DOUBLE && tmp_variable2.getType() == DOUBLE)
                 tmp_variable.setDouble(tmp_variable.getDouble() / tmp_variable2.getDouble());
-            /*else if(tmp_variable.getType() == integer && tmp_variable2.getType() == doubl)
-                tmp_variable.setInteger((double)tmp_variable.getInteger() / tmp_variable2.getDouble());
-            else if(tmp_variable.getType() == doubl && tmp_variable2.getType() == integer)
-                tmp_variable.setInteger(tmp_variable.getInteger() / (double)tmp_variable2.getInteger());*/
         }
     }
     else //variable / number
     {
-        if(tmp_variable.getType() == integer)
+        if(tmp_variable.getType() == INTEGER)
             if((int)divVal == tmp_variable.getInteger()) tmp_variable.setInteger(1);
             else tmp_variable.setInteger(tmp_variable.getInteger() / divVal);
-        else if(tmp_variable.getType() == doubl)
+        else if(tmp_variable.getType() == DOUBLE)
             if(divVal == tmp_variable.getDouble()) tmp_variable.setDouble(1);
             else tmp_variable.setDouble(tmp_variable.getDouble() / divVal);
     }
@@ -1335,38 +1312,38 @@ void Interpreter::div(string &line) //division
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
 }
 
-void Interpreter::increment(string &line) //increment
+void Interpreter::INCREMENT(string line) //increment
 {
     Variable tmp_variable;
 
-    size_t incrementPosition = line.find("++");
-    string varName = line.substr(0, incrementPosition);
+    size_t operatorPosition = line.find(INCREMENT_OPERATOR);
+    string varName = line.substr(0, operatorPosition);
     varName = trim(varName);
 
     tmp_variable = vars[varName];
 
-    if(tmp_variable.getType() == integer)
+    if(tmp_variable.getType() == INTEGER)
         tmp_variable.setInteger(tmp_variable.getInteger()+1);
-    else if(tmp_variable.getType() == doubl)
+    else if(tmp_variable.getType() == DOUBLE)
         tmp_variable.setDouble(tmp_variable.getDouble()+1);
 
     vars.erase(vars.find(varName));
     vars.insert(pair<string, Variable> (varName, tmp_variable));
 }
 
-void Interpreter::decrement(string &line) //decrement
+void Interpreter::DECREMENT(string line) //decrement
 {
     Variable tmp_variable;
 
-    size_t incrementPosition = line.find("--");
-    string varName = line.substr(0, incrementPosition);
+    line = trim(line);
+    string varName = line.substr(DECREMENT_OPERATOR.size());
     varName = trim(varName);
 
     tmp_variable = vars[varName];
 
-    if(tmp_variable.getType() == integer)
+    if(tmp_variable.getType() == INTEGER)
         tmp_variable.setInteger(tmp_variable.getInteger()-1);
-    else if(tmp_variable.getType() == doubl)
+    else if(tmp_variable.getType() == DOUBLE)
         tmp_variable.setDouble(tmp_variable.getDouble()-1);
 
     vars.erase(vars.find(varName));
