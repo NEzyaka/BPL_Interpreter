@@ -1,25 +1,25 @@
 /****************************************************************************
 **
-** @file Interprter class operators implementation
+** @file Interpreter class operators implementation
 **
-** Copyright (C) 2015 Nikita Mironov
+** Copyright (C) 2015-2016 Nikita Mironov
 ** Contact: nekit2002mir@yandex.ru
 **
-** This file is part of BPL Interpreter source code.
-** BPL Interpreter is open-source, cross-platform interpreter for BPL programming language.
+** This file is part of Turnip-Runner source code.
+** Turnip-Runner is open-source, cross-platform interpreter for Turnip programming language.
 **
-** BPL Interpreter is free software: you can redistribute it and/or modify
+** Turnip-Runner is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
 ** the Free Software Foundation, either version 3 of the License, or
 ** (at your option) any later version.
 **
-** BPL Interpreter is distributed in the hope that it will be useful,
+** Turnip-Runner is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with BPL Interpreter. If not, see <http://www.gnu.org/licenses/>.
+** along with Turnip-Runner. If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
 
@@ -43,11 +43,11 @@ void Interpreter::PRINT(string& line) //PRINT
         if(line.find_first_of('"') != line.find_last_of('"'))
         {
             string printValue = trim(line);
-            if((printValue.find_first_of('+') == printValue.find_last_of('+')) != string::npos)
+            if((printValue.find_first_of(AND) == printValue.find_last_of(AND)) != string::npos)
             {
-                if(printValue.find('+') < printValue.find_first_of('"'))
+                if(printValue.find(AND) < printValue.find_first_of('"'))
                 {
-                    string varName = printValue.substr(0, printValue.find_first_of('+'));
+                    string varName = printValue.substr(0, printValue.find_first_of(AND));
                     varName = trim(varName);
                     if(vars.find(varName) != vars.end())
                     {
@@ -63,18 +63,18 @@ void Interpreter::PRINT(string& line) //PRINT
                             cout << (v.getBool() == true ? "TRUE" : "FALSE");
                     }
 
-                    printValue = printValue.substr(printValue.find('+')+1);
+                    printValue = printValue.substr(printValue.find(AND)+3);
                     printValue = trim(printValue);
                     printValue = printValue.substr(printValue.find_first_of('"')+1);
                     printValue = printValue.substr(0, printValue.find_first_of('"'));
                     cout << printValue;
                 }
-                else if(printValue.find('+') > printValue.find_last_of('"'))
+                else if(printValue.find(AND) > printValue.find_last_of('"'))
                 {
-                    string varName = printValue.substr(printValue.find('+')+1);
+                    string varName = printValue.substr(printValue.find(AND)+3);
                     varName = trim(varName);
 
-                    printValue = printValue.substr(0, printValue.find('+'));
+                    printValue = printValue.substr(0, printValue.find(AND));
                     printValue = trim(printValue);
                     printValue = printValue.substr(printValue.find_first_of('"')+1);
                     printValue = printValue.substr(0, printValue.find_first_of('"'));
@@ -133,9 +133,20 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 {
     string varName = line.substr(INPUTVAR_OPERATOR.size());
     varName = trim(varName);
+    string invitation;
 
     if(!varName.empty())
     {
+        if(varName.find_first_of('"') != varName.find_last_of('"'))
+        {
+            invitation = varName;
+            invitation = invitation.substr(invitation.find_first_of('"')+1);
+            invitation = invitation.substr(0, invitation.find_first_of('"'));
+            varName = varName.substr(varName.find_last_of('"')+1);
+            varName = trim(varName);
+        }
+        else invitation = "";
+
         if(varName.find(',') != std::string::npos)
         {
             size_t dotPosition = varName.find(',');
@@ -155,7 +166,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     tmp_variable.setType(varType);
 
                     string value = "";
-                    cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
+
+                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
+                    else cout << invitation << ": ";
 
                     getline(cin, value);
 
@@ -206,7 +219,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     tmp_variable2.setType(varType);
 
                     string value2 = "";
-                    cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+
+                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+                    else cout << invitation << ": ";
 
                     getline(cin, value2);
 
@@ -257,7 +272,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable = vars[firstVarName];
                     string value = "";
 
-                    cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
+                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
+                    else cout << invitation << ": ";
+
                     getline(cin, value);
 
                     if(tmp_variable.getType() == LINE) //LINE
@@ -305,7 +322,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable2 = vars[secondVarName];
                     string value2 = "";
 
-                    cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
+                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
+                    else cout << invitation << ": ";
+
                     getline(cin, value2);
 
                     if(tmp_variable2.getType() == LINE) //LINE
@@ -357,7 +376,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     tmp_variable.setType(varType);
 
                     string value = "";
-                    cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
+
+                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
+                    else cout << invitation << ": ";
 
                     getline(cin, value);
 
@@ -406,7 +427,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable2 = vars[secondVarName];
                     string value2 = "";
 
-                    cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
+                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+                    else cout << invitation << ": ";
+
                     getline(cin, value2);
 
                     if(tmp_variable2.getType() == LINE) //LINE
@@ -456,7 +479,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable = vars[firstVarName];
                     string value = "";
 
-                    cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
+                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
+                    else cout << invitation << ": ";
+
                     getline(cin, value);
 
                     if(tmp_variable.getType() == LINE) //LINE
@@ -506,7 +531,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     tmp_variable2.setType(varType);
 
                     string value2 = "";
-                    cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+
+                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+                    else cout << invitation << ": ";
 
                     getline(cin, value2);
 
@@ -562,7 +589,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 tmp_variable.setType(varType);
 
                 string value = "";
-                cout << "Enter value of '" << varName << "(" << varType << ")': ";
+
+                if(invitation == "") cout << "Enter value of '" << varName << "(" << varType << ")': ";
+                else cout << invitation << ": ";
 
                 getline(cin, value);
 
@@ -612,7 +641,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 Variable tmp_variable = vars[varName];
 
                 string value = "";
-                cout << "Enter value of '" << varName << "(" << tmp_variable.getType() << ")': ";
+
+                if(invitation == "") cout << "Enter value of '" << varName << "(" << tmp_variable.getType() << ")': ";
+                else cout << invitation << ": ";
 
                 getline(cin, value);
 
@@ -1211,7 +1242,7 @@ void Interpreter::MULTIPLY(string line) //multiplication
     Variable tmp_variable;
     Variable tmp_variable2;
 
-   size_t operatorPosition = line.find(MULTIPLY_OPERATOR);
+    size_t operatorPosition = line.find(MULTIPLY_OPERATOR);
     string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 

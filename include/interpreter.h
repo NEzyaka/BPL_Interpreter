@@ -1,25 +1,25 @@
 /****************************************************************************
 **
-** @file Interprter class header
+** @file Interpreter class header
 **
-** Copyright (C) 2015 Nikita Mironov
+** Copyright (C) 2015-2016 Nikita Mironov
 ** Contact: nekit2002mir@yandex.ru
 **
-** This file is part of BPL Interpreter source code.
-** BPL Interpreter is open-source, cross-platform interpreter for BPL programming language.
+** This file is part of Turnip-Runner source code.
+** Turnip-Runner is open-source, cross-platform interpreter for Turnip programming language.
 **
-** BPL Interpreter is free software: you can redistribute it and/or modify
+** Turnip-Runner is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
 ** the Free Software Foundation, either version 3 of the License, or
 ** (at your option) any later version.
 **
-** BPL Interpreter is distributed in the hope that it will be useful,
+** Turnip-Runner is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with BPL Interpreter. If not, see <http://www.gnu.org/licenses/>.
+** along with Turnip-Runner. If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
 
@@ -86,6 +86,8 @@ private:
     const string DOBLOCK_OPERATOR = "DOBLOCK";
     const string BLOCKLIST_OPERATOR = "BLOCKLIST";
     const string IMPORT_OPERATOR = "IMPORT";
+    const string AND = "AND";
+    const string OR = "OR";
 
     void PRINT(string& line);
     void INPUTVAR(string& line);
