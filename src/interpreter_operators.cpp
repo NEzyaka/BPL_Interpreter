@@ -5,21 +5,21 @@
 ** Copyright (C) 2015-2016 Nikita Mironov
 ** Contact: nekit2002mir@yandex.ru
 **
-** This file is part of Turnip-Runner source code.
-** Turnip-Runner is open-source, cross-platform interpreter for Turnip programming language.
+** This file is part of Turnip Runner source code.
+** Turnip Runner is open-source, cross-platform interpreter for Turnip programming language.
 **
-** Turnip-Runner is free software: you can redistribute it and/or modify
+** Turnip Runner is free software: you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
 ** the Free Software Foundation, either version 3 of the License, or
 ** (at your option) any later version.
 **
-** Turnip-Runner is distributed in the hope that it will be useful,
+** Turnip Runner is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ** GNU General Public License for more details.
 **
 ** You should have received a copy of the GNU General Public License
-** along with Turnip-Runner. If not, see <http://www.gnu.org/licenses/>.
+** along with Turnip Runner. If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
 
@@ -158,9 +158,8 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
             if(!firstVarName.empty() && !secondVarName.empty())
             {
-                if(mustInputVars.find(firstVarName) != mustInputVars.end() && mustInputVars.find(secondVarName) != mustInputVars.end())
+                if(mustInputVars.find(firstVarName) != mustInputVars.end())
                 {
-                    //first var
                     string varType = mustInputVars[firstVarName];
                     Variable tmp_variable;
                     tmp_variable.setType(varType);
@@ -212,63 +211,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
                     mustInputVars.erase(mustInputVars.find(firstVarName));
                     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
-
-                    //second var
-                    varType = mustInputVars[secondVarName];
-                    Variable tmp_variable2;
-                    tmp_variable2.setType(varType);
-
-                    string value2 = "";
-
-                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
-                    else cout << invitation << ": ";
-
-                    getline(cin, value2);
-
-                    if(varType == LINE) //LINE
-                    {
-                        tmp_variable2.setString(value2);
-                    }
-                    else if(varType == INTEGER) //INTEGER
-                    {
-                        int intVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> intVal;
-                        converter.flush();
-
-                        tmp_variable2.setInteger(intVal);
-                    }
-                    else if(varType == DOUBLE) //DOUBLE
-                    {
-                        double doubleVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> doubleVal;
-                        converter.flush();
-
-                        tmp_variable2.setDouble(doubleVal);
-                    }
-                    else if(varType == BOOL) //BOOL
-                    {
-                        bool boolValue = false;
-                        if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
-                            boolValue = true;
-                        else if(!strstr(value2.c_str(), "TRUE") || !strstr(value2.c_str(), "true"))
-                        {
-                            stringstream converter(value);
-                            converter >> std::boolalpha >> boolValue;
-                            converter.flush();
-                        }
-                        tmp_variable2.setBool(boolValue);
-                    }
-
-                    mustInputVars.erase(mustInputVars.find(secondVarName));
-                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable2));
                 }
-                else if(vars.find(firstVarName) != vars.end() && vars.find(secondVarName) != vars.end())
+                else if(vars.find(firstVarName) != vars.end())
                 {
-                    //first var
                     Variable tmp_variable = vars[firstVarName];
                     string value = "";
 
@@ -317,266 +262,111 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
                     vars.erase(vars.find(firstVarName));
                     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
-
-                    //second var
-                    Variable tmp_variable2 = vars[secondVarName];
-                    string value2 = "";
-
-                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable2.getType() << ")': ";
-                    else cout << invitation << ": ";
-
-                    getline(cin, value2);
-
-                    if(tmp_variable2.getType() == LINE) //LINE
-                    {
-                        tmp_variable2.setString(value2);
-                    }
-                    else if(tmp_variable2.getType() == INTEGER) //INTEGER
-                    {
-                        int intVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> intVal;
-                        converter.flush();
-
-                        tmp_variable2.setInteger(intVal);
-                    }
-                    else if(tmp_variable2.getType() == DOUBLE) //DOUBLE
-                    {
-                        double doubleVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> doubleVal;
-                        converter.flush();
-
-                        tmp_variable2.setDouble(doubleVal);
-                    }
-                    else if(tmp_variable2.getType() == BOOL) //BOOL
-                    {
-                        bool boolValue = false;
-                        if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
-                            boolValue = true;
-                        else if(!strstr(value2.c_str(), "TRUE") || !strstr(value2.c_str(), "true"))
-                        {
-                            stringstream converter(value2);
-                            converter >> std::boolalpha >> boolValue;
-                            converter.flush();
-                        }
-                        tmp_variable2.setBool(boolValue);
-                    }
-
-                    vars.erase(vars.find(secondVarName));
-                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable2));
                 }
-                else if(mustInputVars.find(firstVarName) != mustInputVars.end() && vars.find(secondVarName) != vars.end())
+                if(mustInputVars.find(secondVarName) != mustInputVars.end())
                 {
-                    //first var
-                    string varType = mustInputVars[firstVarName];
-                    Variable tmp_variable;
-                    tmp_variable.setType(varType);
-
-                    string value = "";
-
-                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
-                    else cout << invitation << ": ";
-
-                    getline(cin, value);
-
-                    if(varType == LINE) //LINE
-                    {
-                        tmp_variable.setString(value);
-                    }
-                    else if(varType == INTEGER) //INTEGER
-                    {
-                        int intVal = 0;
-
-                        stringstream converter(value);
-                        converter >> intVal;
-                        converter.flush();
-
-                        tmp_variable.setInteger(intVal);
-                    }
-                    else if(varType == DOUBLE) //DOUBLE
-                    {
-                        double doubleVal = 0;
-
-                        stringstream converter(value);
-                        converter >> doubleVal;
-                        converter.flush();
-
-                        tmp_variable.setDouble(doubleVal);
-                    }
-                    else if(varType == BOOL) //BOOL
-                    {
-                        bool boolValue = false;
-                        if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
-                            boolValue = true;
-                        else if(!strstr(value.c_str(), "TRUE") || !strstr(value.c_str(), "true"))
-                        {
-                            stringstream converter(value);
-                            converter >> std::boolalpha >> boolValue;
-                            converter.flush();
-                        }
-                        tmp_variable.setBool(boolValue);
-                    }
-
-                    mustInputVars.erase(mustInputVars.find(firstVarName));
-                    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
-
-                    //second var
-                    Variable tmp_variable2 = vars[secondVarName];
-                    string value2 = "";
-
-                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
-                    else cout << invitation << ": ";
-
-                    getline(cin, value2);
-
-                    if(tmp_variable2.getType() == LINE) //LINE
-                    {
-                        tmp_variable2.setString(value2);
-                    }
-                    else if(tmp_variable2.getType() == INTEGER) //INTEGER
-                    {
-                        int intVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> intVal;
-                        converter.flush();
-
-                        tmp_variable2.setInteger(intVal);
-                    }
-                    else if(tmp_variable2.getType() == DOUBLE) //DOUBLE
-                    {
-                        double doubleVal = 0;
-
-                        stringstream converter(value2);
-                        converter >> doubleVal;
-                        converter.flush();
-
-                        tmp_variable2.setDouble(doubleVal);
-                    }
-                    else if(tmp_variable2.getType() == BOOL) //BOOL
-                    {
-                        bool boolValue = false;
-                        if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
-                            boolValue = true;
-                        else if(!strstr(value2.c_str(), "TRUE") || !strstr(value2.c_str(), "true"))
-                        {
-                            stringstream converter(value2);
-                            converter >> std::boolalpha >> boolValue;
-                            converter.flush();
-                        }
-                        tmp_variable2.setBool(boolValue);
-                    }
-
-                    vars.erase(vars.find(secondVarName));
-                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable2));
-                }
-                else if(vars.find(firstVarName) != vars.end() && mustInputVars.find(secondVarName) != mustInputVars.end())
-                {
-                    //first var
-                    Variable tmp_variable = vars[firstVarName];
-                    string value = "";
-
-                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
-                    else cout << invitation << ": ";
-
-                    getline(cin, value);
-
-                    if(tmp_variable.getType() == LINE) //LINE
-                    {
-                        tmp_variable.setString(value);
-                    }
-                    else if(tmp_variable.getType() == INTEGER) //INTEGER
-                    {
-                        int intVal = 0;
-
-                        stringstream converter(value);
-                        converter >> intVal;
-                        converter.flush();
-
-                        tmp_variable.setInteger(intVal);
-                    }
-                    else if(tmp_variable.getType() == DOUBLE) //DOUBLE
-                    {
-                        double doubleVal = 0;
-
-                        stringstream converter(value);
-                        converter >> doubleVal;
-                        converter.flush();
-
-                        tmp_variable.setDouble(doubleVal);
-                    }
-                    else if(tmp_variable.getType() == BOOL) //BOOL
-                    {
-                        bool boolValue = false;
-                        if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
-                            boolValue = true;
-                        else if(!strstr(value.c_str(), "TRUE") || !strstr(value.c_str(), "true"))
-                        {
-                            stringstream converter(value);
-                            converter >> std::boolalpha >> boolValue;
-                            converter.flush();
-                        }
-                        tmp_variable.setBool(boolValue);
-                    }
-
-                    vars.erase(vars.find(firstVarName));
-                    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
-
-                    //second var
                     string varType = mustInputVars[secondVarName];
-                    Variable tmp_variable2;
-                    tmp_variable2.setType(varType);
+                    Variable tmp_variable;
+                    tmp_variable.setType(varType);
 
-                    string value2 = "";
+                    string value = "";
 
                     if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
                     else cout << invitation << ": ";
 
-                    getline(cin, value2);
+                    getline(cin, value);
 
                     if(varType == LINE) //LINE
                     {
-                        tmp_variable2.setString(value2);
+                        tmp_variable.setString(value);
                     }
                     else if(varType == INTEGER) //INTEGER
                     {
                         int intVal = 0;
 
-                        stringstream converter(value2);
+                        stringstream converter(value);
                         converter >> intVal;
                         converter.flush();
 
-                        tmp_variable2.setInteger(intVal);
+                        tmp_variable.setInteger(intVal);
                     }
                     else if(varType == DOUBLE) //DOUBLE
                     {
                         double doubleVal = 0;
 
-                        stringstream converter(value2);
+                        stringstream converter(value);
                         converter >> doubleVal;
                         converter.flush();
 
-                        tmp_variable2.setDouble(doubleVal);
+                        tmp_variable.setDouble(doubleVal);
                     }
                     else if(varType == BOOL) //BOOL
                     {
                         bool boolValue = false;
-                        if(strstr(value2.c_str(), "TRUE") || strstr(value2.c_str(), "true"))
+                        if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
                             boolValue = true;
-                        else if(!strstr(value2.c_str(), "TRUE") || !strstr(value2.c_str(), "true"))
+                        else if(!strstr(value.c_str(), "TRUE") || !strstr(value.c_str(), "true"))
                         {
                             stringstream converter(value);
                             converter >> std::boolalpha >> boolValue;
                             converter.flush();
                         }
-                        tmp_variable2.setBool(boolValue);
+                        tmp_variable.setBool(boolValue);
                     }
 
                     mustInputVars.erase(mustInputVars.find(secondVarName));
-                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable2));
+                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable));
+                }
+                else if(vars.find(secondVarName) != vars.end())
+                {
+                    Variable tmp_variable = vars[secondVarName];
+                    string value = "";
+
+                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable.getType() << ")': ";
+                    else cout << invitation << ": ";
+
+                    getline(cin, value);
+
+                    if(tmp_variable.getType() == LINE) //LINE
+                    {
+                        tmp_variable.setString(value);
+                    }
+                    else if(tmp_variable.getType() == INTEGER) //INTEGER
+                    {
+                        int intVal = 0;
+
+                        stringstream converter(value);
+                        converter >> intVal;
+                        converter.flush();
+
+                        tmp_variable.setInteger(intVal);
+                    }
+                    else if(tmp_variable.getType() == DOUBLE) //DOUBLE
+                    {
+                        double doubleVal = 0;
+
+                        stringstream converter(value);
+                        converter >> doubleVal;
+                        converter.flush();
+
+                        tmp_variable.setDouble(doubleVal);
+                    }
+                    else if(tmp_variable.getType() == BOOL) //BOOL
+                    {
+                        bool boolValue = false;
+                        if(strstr(value.c_str(), "TRUE") || strstr(value.c_str(), "true"))
+                            boolValue = true;
+                        else if(!strstr(value.c_str(), "TRUE") || !strstr(value.c_str(), "true"))
+                        {
+                            stringstream converter(value);
+                            converter >> std::boolalpha >> boolValue;
+                            converter.flush();
+                        }
+                        tmp_variable.setBool(boolValue);
+                    }
+
+                    vars.erase(vars.find(secondVarName));
+                    vars.insert(pair<string, Variable> (secondVarName, tmp_variable));
                 }
             }
         }
@@ -1128,6 +918,48 @@ void Interpreter::IMPORT(string& file) //IMPORT
     }
 }
 
+void Interpreter::INVERT(string& line) //INVERT
+{
+    line = line.substr(INVERT_OPERATOR.size());
+    line = trim(line);
+
+    Variable tmp_variable = vars[line];
+
+    if(tmp_variable.getType() == LINE) //LINE
+    {
+        string in = tmp_variable.getString();
+
+        char* buff = new char[in.size()+1];
+        for(int i = in.size() - 1; i >= 0; i--)
+            buff[in.size() - i - 1] = in[i];
+        buff[in.size()] = '\0';
+
+        tmp_variable.setString(buff);
+    }
+    else if(tmp_variable.getType() == INTEGER) //INTEGER
+    {
+        if(tmp_variable.getInteger())
+            tmp_variable.setInteger(0 - tmp_variable.getInteger());
+        else if(!tmp_variable.getInteger())
+            tmp_variable.setInteger(0 + tmp_variable.getInteger());
+        else tmp_variable.setInteger(0);
+    }
+    else if(tmp_variable.getType() == DOUBLE) //DOUBLE
+    {
+        if(tmp_variable.getDouble())
+            tmp_variable.setDouble(0.0 - tmp_variable.getDouble());
+        else if(!tmp_variable.getDouble())
+            tmp_variable.setDouble(0.0 + tmp_variable.getDouble());
+        else tmp_variable.setDouble(0.0);
+    }
+    else if(tmp_variable.getType() == BOOL) //BOOL
+    {
+        tmp_variable.setBool(!tmp_variable.getBool());
+    }
+
+    vars.erase(vars.find(line));
+    vars.insert(pair<string, Variable> (line, tmp_variable));
+}
 
 //arithmetic operations with vars
 
