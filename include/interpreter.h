@@ -154,11 +154,11 @@ private:
     void parseCondition(string& line);
 
     /// cycles
-    const string forCycle = "FOR";
-    const string endForCycle = "ENDFOR";
-    bool inFor = false;
+    const string REPEAT_BEGIN = "REPEAT";
+    const string ENDREPEAT = "ENDREPEAT";
+    bool inRepeat = false;
     void parseCycle(string& line);
-    int forNumber = 0;
+    int repeatIndex = 0;
     int currentIndex = 0;
     vector<string>forBlock;
 

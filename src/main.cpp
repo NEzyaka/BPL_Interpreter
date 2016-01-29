@@ -28,6 +28,8 @@
 #include <cstdio>
 #include <sstream>
 
+#include <ctime>
+
 #include "interpreter.h"
 
 void version() //show information about version

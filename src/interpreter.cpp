@@ -2124,7 +2124,7 @@ void Interpreter::parseCondition(string &line)
 
 void Interpreter::parseCycle(string &line)
 {
-    string condition = line.substr(forCycle.size());
+    string condition = line.substr(REPEAT_BEGIN.size());
     condition = trim(condition);
     condition = condition.substr(condition.find_first_of('(')+1, condition.find_first_of(')')-1);
     condition = trim(condition);
@@ -2132,7 +2132,7 @@ void Interpreter::parseCycle(string &line)
     if(isNum(condition))
     {
         stringstream convert(condition);
-        convert >> forNumber;
+        convert >> repeatIndex;
     }
 }
 
