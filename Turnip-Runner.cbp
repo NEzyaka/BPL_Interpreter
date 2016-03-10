@@ -22,6 +22,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="D:\test.txt" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
@@ -38,9 +39,14 @@
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="include/checker.h" />
 		<Unit filename="include/interpreter.h" />
 		<Unit filename="include/variable.h" />
+		<Unit filename="src/checker.cpp" />
+		<Unit filename="src/checker_condition.cpp" />
+		<Unit filename="src/checker_operators.cpp" />
 		<Unit filename="src/interpreter.cpp" />
+		<Unit filename="src/interpreter_condition.cpp" />
 		<Unit filename="src/interpreter_operators.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>

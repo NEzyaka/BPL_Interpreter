@@ -147,13 +147,13 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
         }
         else invitation = "";
 
-        if(varName.find(',') != std::string::npos)
+        if(varName.find(AND) != std::string::npos)
         {
-            size_t dotPosition = varName.find(',');
-            string firstVarName = varName.substr(0, dotPosition);
+            size_t andPosition = varName.find(AND);
+            string firstVarName = varName.substr(0, andPosition);
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(dotPosition+2);
+            string secondVarName = varName.substr(andPosition+3);
             secondVarName = trim(secondVarName);
 
             if(!firstVarName.empty() && !secondVarName.empty())
@@ -484,38 +484,43 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
 void Interpreter::ALERT() //ALERT
 {
-    cout << "\a";    //ALERT
+    cout << "\a";
 }
 
 void Interpreter::NEXTLINE() //NEXTLINE
 {
-    cout << "\n";    //NEXTLINE
+    cout << endl << endl;
 }
 
 void Interpreter::CLEARSCREEN() //CLEARSCREEN
 {
     system("cls");
-    cout << "Successful interpreting!\n" << "File: " << filename <<"\nLines in code: " << code.size() << "\nOutput:" << endl;
+    cout << "Successful interpreting!\n" << "File: " << filename << "\nOutput:" << endl;
 }
 
 void Interpreter::DUMP() //DUMP
 {
-    map<string, Variable>::const_iterator iter;
-    int ix = 1;
-    for(iter = vars.begin(); iter != vars.end(); iter++, ix++)
+    int i = 1;
+    for(auto iter = vars.begin(); iter != vars.end(); iter++)
     {
-        cout << ix << ": " << iter->first << " -> ";
+        //cout << i << ": " << iter->first << " -> ";
 
         Variable v = iter->second;
 
-        if(v.getType() == LINE)
-            cout << v.getString() << " [LINE, length: " << v.getString().size() << " symbols, size: " << sizeof(v.getString()) << " bytes]" << endl;
-        else if(v.getType() == INTEGER)
-            cout << v.getInteger() << " [INTEGER, size: " << sizeof(v.getInteger()) << " bytes]" << endl;
-        else if(v.getType() == DOUBLE)
-            cout << v.getDouble() << " [DOUBLE, size: " << sizeof(v.getDouble()) << " bytes]" << endl;
-        else if(v.getType() == BOOL)
-            cout << (v.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(v.getBool()) << " bytes]" << endl;
+        if(v.getType() == LINE || v.getType() == INTEGER || v.getType() == DOUBLE || v.getType() == BOOL)
+        {
+            cout << i << ": " << iter->first << " -> ";
+
+            if(v.getType() == LINE)
+                cout << v.getString() << " [LINE, length: " << v.getString().size() << " symbols, size: " << sizeof(v.getString()) << " bytes]" << endl;
+            else if(v.getType() == INTEGER)
+                cout << v.getInteger() << " [INTEGER, size: " << sizeof(v.getInteger()) << " bytes]" << endl;
+            else if(v.getType() == DOUBLE)
+                cout << v.getDouble() << " [DOUBLE, size: " << sizeof(v.getDouble()) << " bytes]" << endl;
+            else if(v.getType() == BOOL)
+                cout << (v.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(v.getBool()) << " bytes]" << endl;
+            i++;
+        }
     }
 }
 
@@ -526,16 +531,16 @@ void Interpreter::DUMPVAR(string& line) //DUMPVAR
 
     if(!varName.empty())
     {
-        if(strstr(varName.c_str(), ","))
+        if(varName.find(AND) != string::npos)
         {
             Variable tmp_variable;
             Variable tmp_variable2;
 
-            size_t dotPosition = varName.find(',');
-            string firstVarName = varName.substr(0, dotPosition);
+            size_t andPosition = varName.find(AND);
+            string firstVarName = varName.substr(0, andPosition);
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(dotPosition+2);
+            string secondVarName = varName.substr(andPosition+3);
             secondVarName = trim(secondVarName);
 
             stringstream convert(secondVarName);
@@ -710,16 +715,16 @@ void Interpreter::DELETE(string& line) //DELETE
 
     if(!varName.empty())
     {
-        if(strstr(varName.c_str(), ","))
+        if(varName.find(AND) != string::npos)
         {
             Variable tmp_variable;
             Variable tmp_variable2;
 
-            size_t dotPosition = varName.find(',');
-            string firstVarName = varName.substr(0, dotPosition);
+            size_t andPosition = varName.find(AND);
+            string firstVarName = varName.substr(0, andPosition);
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(dotPosition+2);
+            string secondVarName = varName.substr(andPosition+3);
             secondVarName = trim(secondVarName);
 
             if(!firstVarName.empty())
@@ -972,7 +977,7 @@ void Interpreter::ADD(string line) //addition
     string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(ADD_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+ADD_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1025,7 +1030,7 @@ void Interpreter::SUBTRACT(string line) //subtraction
     string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(SUBTRACT_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+SUBTRACT_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1078,7 +1083,7 @@ void Interpreter::MULTIPLY(string line) //multiplication
     string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(MULTIPLY_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+MULTIPLY_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1131,7 +1136,7 @@ void Interpreter::DIVISE(string line) //division
     string firstVarName = line.substr(0, operatorPosition);
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(DIVISE_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+DIVISE_OPERATOR.size()+1);
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);

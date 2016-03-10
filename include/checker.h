@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** @file Interpreter class header
+** @file Checker class header
 **
 ** Copyright (C) 2015-2016 Nikita Mironov
 ** Contact: nekit2002mir@yandex.ru
@@ -23,46 +23,35 @@
 **
 ****************************************************************************/
 
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef CHECKER_H
+#define CHECKER_H
 
 #include <vector>
+#include <string>
 #include <map>
 #include <sstream>
-#include <iostream>
 
 #include "variable.h"
-#include "checker.h"
+#include "interpreter.h"
 
 using namespace std;
 
-class Interpreter
+class Checker
 {
-public:
-    void interpret(); //interprter
-    void getKeyboardCode(); //getting code from keyboard
-    string filename; //name of file
-
 private:
-    bool fileIsEmpty = true;
-
-    typedef const string error;
-    //errors
-    error FILE_IS_EMPTY = "File is empty!\n";
-    error READ_ERROR = "Read error!\n";
-
+    bool isOK;
 
     typedef const string keyword;
     //blocks
     keyword BEGINBLOCK = "BEGINBLOCK"; //keywords
     keyword ENDBLOCK = "ENDBLOCK";
-    keyword MAIN_BLOCK = "MAIN";
+    keyword MAINBLOCK = "MAIN";
     map<string, vector<string> >blocks; //arrays
     vector<string>blockNames;
     vector<string>currentBlock;
     vector<string>code;
-    void doBlock(vector<string>block); //methods
-    void doOperator(string line);
+    void checkBlock(vector<string>block); //methods
+    void checkOperator(string line);
     void makeBlocks(vector<string>code);
     string blockName; //variables
     bool inBlock = false;
@@ -124,12 +113,11 @@ private:
     keyword INCREMENT_OPERATOR = "+";
     keyword DECREMENT_OPERATOR = "-";
 
-    //comment keyword
+    //comment
     keyword SINGLE_LINE_COMMENT = "@";
 
     //getting of code
     string readCode(istream& in);
-    void getFileCode();
     string inputLine;
 
     //variables
@@ -140,6 +128,7 @@ private:
     map<string, Variable> vars; //arrays
     map<string, string> mustInputVars;
     void declareVar(string& line); //declaring a var
+
 
     //conditions
     keyword IF_BEGIN = "IF"; //keywords
@@ -221,7 +210,14 @@ private:
         string line;
         string message;
     };
+public:
+    Checker(vector<string> c)
+    {
+        isOK = true;
+        code = c;
+    }
+    bool check(); //checker
+    vector<errorException>errors;
 };
 
-
-#endif // INTERPRETER_H
+#endif // CHECKER_H

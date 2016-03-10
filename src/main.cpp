@@ -25,82 +25,83 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <cstdio>
+#include <conio.h>
 #include <sstream>
-
-#include <ctime>
 
 #include "interpreter.h"
 
+using namespace std;
+
 void version() //show information about version
 {
-    std::cout << "Turnip Runner 16.02 Preview\n"
-              "Copyright (C) 2015-2016 Nikita Mironov\n"
-              "\n"
-              "This program comes with ABSOLUTELY NO WARRANTY.\n"
-              "This is free software, and you are welcome to redistribute it\n"
-              "under certain conditions.\n"
-              "\n"
-              "Start this program with command prompt argument '-license'\n"
-              "or see <http://www.gnu.org/licenses/gpl> for show terms of GNU GPL v3.\n"
-              "\n"
-              "For more info see <https://github.com/NEzyaka/Turnip-Runner>\n";
+    cout << "Turnip Runner 16.03 Preview\n"
+         "Copyright (C) 2015-2016 Nikita Mironov\n"
+         "\n"
+         "This program comes with ABSOLUTELY NO WARRANTY.\n"
+         "This is free software, and you are welcome to redistribute it\n"
+         "under certain conditions.\n"
+         "\n"
+         "Start this program with command prompt argument '-license'\n"
+         "or see <http://www.gnu.org/licenses/gpl> for show terms of GNU GPL v3.\n"
+         "\n"
+         "For more info see <https://github.com/NEzyaka/Turnip-Runner>\n";
 }
 
 void showLicense() //show terms of GNU GPL v3
 {
+#ifdef _WIN32
     system("start COPYING.txt");
-    system("exit");
+#else
+    system("COPYING.txt");
+#endif //_WIN32
 }
 
 int main(int argc, char** argv)
 {
-    system("title Turnip Runner 16.02 Preview");
+#ifdef _WIN32
+    system("title Turnip Runner 16.03 Preview");
+#endif // _WIN32
 
-    Interpreter* interpreter = new Interpreter;
+    setlocale(0, ".65001"); //UTF-8 support
 
-    if(argc >= 2)
+    Interpreter interpreter;
+
+    if(argc >= 2) //one ore more arguments
     {
-        std::string* arg = new std::string("");
-        std::stringstream* convert = new std::stringstream(argv[1]);
-        *convert >> *arg;
-        delete convert;
+        stringstream convert(argv[1]);
+        string arg = convert.str();
 
-        interpreter->filename = *arg;
+        interpreter.filename = arg;
 
-        if(argc == 3)
+        if(argc == 3) //two arguments
         {
-            std::string* arg = new std::string("");
-            std::stringstream* convert = new std::stringstream(argv[2]);
-            *convert >> *arg;
+            stringstream convert(argv[2]);
+            string arg = convert.str();
 
-            if(*arg == "-edit") //editing of file
+            if(arg == "-edit") //editing of file
             {
-                interpreter->getKeyboardCode();
+                interpreter.getKeyboardCode();
                 return 0;
             }
-
-            delete arg;
-            delete convert;
         }
-
-        if(*arg == "-ver")
-            version();
-        else if(*arg == "-license")
-            showLicense();
-        else interpreter->interpret();
-
-        delete arg;
+        else if(argc == 2) //one argument
+        {
+            if(arg == "-ver") //show information about version
+                version();
+            else if(arg == "-license") //show terms of GNU GPL v3
+                showLicense();
+            else interpreter.interpret(); //interpret a file
+        }
     }
-    else
+    else //no arguments
     {
-        std::cout << "Enter the path of file: ";
-        std::getline(std::cin, interpreter->filename);
-        interpreter->interpret();
+        cout << "Enter the path of file: ";
+        getline(cin, interpreter.filename);
+        interpreter.interpret();
     }
 
-    delete interpreter;
-    getchar();
+    cout << "\nPress any key to exit...";
+    getch();
 
     return 0;
 }
