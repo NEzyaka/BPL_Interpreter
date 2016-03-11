@@ -497,11 +497,11 @@ void Interpreter::NEXTLINE() //NEXTLINE
 
 void Interpreter::CLEARSCREEN() //CLEARSCREEN
 {
-    #ifdef _WIN32
+#ifdef _WIN32
     system("cls");
-    #else
+#else
     system("clear");
-    #endif
+#endif
 
     cout << "Successful interpreting!\n" << "File: " << filename << "\nOutput:" << endl;
 }
@@ -549,29 +549,29 @@ void Interpreter::DUMPVAR(string& line) //DUMPVAR
             string secondVarName = varName.substr(andPosition+3); //getting second variable's name
             secondVarName = trim(secondVarName);
 
-                if(!firstVarName.empty())
-                    tmp_variable = vars[firstVarName];
-                if(!secondVarName.empty())
-                    tmp_variable2 = vars[secondVarName];
+            if(!firstVarName.empty())
+                tmp_variable = vars[firstVarName];
+            if(!secondVarName.empty())
+                tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() == LINE)
-                    cout << firstVarName << " -> " << tmp_variable.getString() << " [LINE, length: " << tmp_variable.getString().size() << " symbols, size: " << sizeof(tmp_variable.getString()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == INTEGER)
-                    cout << firstVarName << " -> " << tmp_variable.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable.getInteger()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == DOUBLE)
-                    cout << firstVarName << " -> " << tmp_variable.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable.getDouble()) << " bytes]" << endl;
-                else if(tmp_variable.getType() == BOOL)
-                    cout << firstVarName << " -> " << (tmp_variable.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable.getBool()) << " bytes]" << endl;
+            if(tmp_variable.getType() == LINE)
+                cout << firstVarName << " -> " << tmp_variable.getString() << " [LINE, length: " << tmp_variable.getString().size() << " symbols, size: " << sizeof(tmp_variable.getString()) << " bytes]" << endl;
+            else if(tmp_variable.getType() == INTEGER)
+                cout << firstVarName << " -> " << tmp_variable.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable.getInteger()) << " bytes]" << endl;
+            else if(tmp_variable.getType() == DOUBLE)
+                cout << firstVarName << " -> " << tmp_variable.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable.getDouble()) << " bytes]" << endl;
+            else if(tmp_variable.getType() == BOOL)
+                cout << firstVarName << " -> " << (tmp_variable.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable.getBool()) << " bytes]" << endl;
 
 
-                if(tmp_variable2.getType() == LINE)
-                    cout << secondVarName << " -> " << tmp_variable2.getString() << " [LINE, length: " << tmp_variable2.getString().size() << " symbols, size: " << sizeof(tmp_variable2.getString()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == INTEGER)
-                    cout << secondVarName << " -> " << tmp_variable2.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable2.getInteger()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == DOUBLE)
-                    cout << secondVarName << " -> " << tmp_variable2.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable2.getDouble()) << " bytes]" << endl;
-                else if(tmp_variable2.getType() == BOOL)
-                    cout << secondVarName << " -> " << (tmp_variable2.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable2.getBool()) << " bytes]" << endl;
+            if(tmp_variable2.getType() == LINE)
+                cout << secondVarName << " -> " << tmp_variable2.getString() << " [LINE, length: " << tmp_variable2.getString().size() << " symbols, size: " << sizeof(tmp_variable2.getString()) << " bytes]" << endl;
+            else if(tmp_variable2.getType() == INTEGER)
+                cout << secondVarName << " -> " << tmp_variable2.getInteger() << " [INTEGER, size: " << sizeof(tmp_variable2.getInteger()) << " bytes]" << endl;
+            else if(tmp_variable2.getType() == DOUBLE)
+                cout << secondVarName << " -> " << tmp_variable2.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable2.getDouble()) << " bytes]" << endl;
+            else if(tmp_variable2.getType() == BOOL)
+                cout << secondVarName << " -> " << (tmp_variable2.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable2.getBool()) << " bytes]" << endl;
         }
         else //only one variable
         {
@@ -592,10 +592,10 @@ void Interpreter::DUMPVAR(string& line) //DUMPVAR
 void Interpreter::COMMAND(string& line) //COMMAND
 {
     string val = line.substr(COMMAND_OPERATOR.size()); //getting command prompt argument
-        string argValue = "start " + val;
-            argValue = trim(argValue);
+    string argValue = "start " + val;
+    argValue = trim(argValue);
 
-            system(argValue.c_str()); //running commant prompt with received argument
+    system(argValue.c_str()); //running commant prompt with received argument
 }
 
 void Interpreter::FONTCOLOR(string& line) //FONTCOLOR
@@ -603,41 +603,41 @@ void Interpreter::FONTCOLOR(string& line) //FONTCOLOR
     string colorValue = line.substr(COLOR_OPERATOR.size()); //getting font color
     colorValue = trim(colorValue);
 
-        string arg = "color ";
-        if(colorValue == "BLACK" || colorValue == "black")
-            arg.append("0");
-        else if(colorValue == "BLUE" || colorValue == "blue")
-            arg.append("1");
-        else if(colorValue == "GREEN" || colorValue == "green")
-            arg.append("2");
-        else if(colorValue == "CYAN" || colorValue == "cyan")
-            arg.append("3");
-        else if(colorValue == "RED" || colorValue == "red")
-            arg.append("4");
-        else if(colorValue == "PURPLE" || colorValue == "purple")
-            arg.append("5");
-        else if(colorValue == "YELLOW" || colorValue == "yellow")
-            arg.append("6");
-        else if(colorValue == "WHITE" || colorValue == "white")
-            arg.append("7");
-        else if(colorValue == "GRAY" || colorValue == "gray")
-            arg.append("8");
-        else if(colorValue == "LIGHTGRAY" || colorValue == "lightgray")
-            arg.append("9");
-        else if(colorValue == "LIGHTGREEN" || colorValue == "lightgreen")
-            arg.append("a");
-        else if(colorValue == "LIGHTBLUE" || colorValue == "lightblue")
-            arg.append("b");
-        else if(colorValue == "LIGHTRED" || colorValue == "lightred")
-            arg.append("c");
-        else if(colorValue == "LIGHTPURPLE" || colorValue == "lightpurple")
-            arg.append("d");
-        else if(colorValue == "LIGHTYELLOW" || colorValue == "lightyellow")
-            arg.append("e");
-        else if(colorValue == "LIGHTWHITE" || colorValue == "lightwhite")
-            arg.append("f");
+    string arg = "color ";
+    if(colorValue == "BLACK" || colorValue == "black")
+        arg.append("0");
+    else if(colorValue == "BLUE" || colorValue == "blue")
+        arg.append("1");
+    else if(colorValue == "GREEN" || colorValue == "green")
+        arg.append("2");
+    else if(colorValue == "CYAN" || colorValue == "cyan")
+        arg.append("3");
+    else if(colorValue == "RED" || colorValue == "red")
+        arg.append("4");
+    else if(colorValue == "PURPLE" || colorValue == "purple")
+        arg.append("5");
+    else if(colorValue == "YELLOW" || colorValue == "yellow")
+        arg.append("6");
+    else if(colorValue == "WHITE" || colorValue == "white")
+        arg.append("7");
+    else if(colorValue == "GRAY" || colorValue == "gray")
+        arg.append("8");
+    else if(colorValue == "LIGHTGRAY" || colorValue == "lightgray")
+        arg.append("9");
+    else if(colorValue == "LIGHTGREEN" || colorValue == "lightgreen")
+        arg.append("a");
+    else if(colorValue == "LIGHTBLUE" || colorValue == "lightblue")
+        arg.append("b");
+    else if(colorValue == "LIGHTRED" || colorValue == "lightred")
+        arg.append("c");
+    else if(colorValue == "LIGHTPURPLE" || colorValue == "lightpurple")
+        arg.append("d");
+    else if(colorValue == "LIGHTYELLOW" || colorValue == "lightyellow")
+        arg.append("e");
+    else if(colorValue == "LIGHTWHITE" || colorValue == "lightwhite")
+        arg.append("f");
 
-        system(arg.c_str()); //setting font color
+    system(arg.c_str()); //setting font color
 }
 
 void Interpreter::SWAP(string& line) //SWAP
@@ -959,7 +959,7 @@ void Interpreter::INVERT(string& line) //INVERT
 
 //arithmetic operations with vars
 
-void Interpreter::ADD(string line) //addition
+void Interpreter::ADD(string& line) //addition
 {
     Variable tmp_variable;
     Variable tmp_variable2;
@@ -1012,7 +1012,7 @@ void Interpreter::ADD(string line) //addition
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
-void Interpreter::SUBTRACT(string line) //subtraction
+void Interpreter::SUBTRACT(string& line) //subtraction
 {
     Variable tmp_variable;
     Variable tmp_variable2;
@@ -1065,7 +1065,7 @@ void Interpreter::SUBTRACT(string line) //subtraction
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
-void Interpreter::MULTIPLY(string line) //multiplication
+void Interpreter::MULTIPLY(string& line) //multiplication
 {
     Variable tmp_variable;
     Variable tmp_variable2;
@@ -1118,7 +1118,7 @@ void Interpreter::MULTIPLY(string line) //multiplication
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
-void Interpreter::DIVISE(string line) //division
+void Interpreter::DIVISE(string& line) //division
 {
     Variable tmp_variable;
     Variable tmp_variable2;
@@ -1171,7 +1171,7 @@ void Interpreter::DIVISE(string line) //division
     vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
-void Interpreter::INCREMENT(string line) //increment
+void Interpreter::INCREMENT(string& line) //increment
 {
     Variable tmp_variable;
 
@@ -1190,7 +1190,7 @@ void Interpreter::INCREMENT(string line) //increment
     vars.insert(pair<string, Variable> (varName, tmp_variable)); //push a new value
 }
 
-void Interpreter::DECREMENT(string line) //decrement
+void Interpreter::DECREMENT(string& line) //decrement
 {
     Variable tmp_variable;
 

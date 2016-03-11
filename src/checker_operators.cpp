@@ -448,7 +448,7 @@ void Checker::INVERT(string& line) //INVERT
 
 //arithmetic operations with vars
 
-void Checker::ADD(string line) //addition
+void Checker::ADD(string& line) //addition
 {
     try
     {
@@ -515,7 +515,7 @@ void Checker::ADD(string line) //addition
     }
 }
 
-void Checker::SUBTRACT(string line) //subtraction
+void Checker::SUBTRACT(string& line) //subtraction
 {
     try
     {
@@ -582,7 +582,7 @@ void Checker::SUBTRACT(string line) //subtraction
     }
 }
 
-void Checker::MULTIPLY(string line) //multiplication
+void Checker::MULTIPLY(string& line) //multiplication
 {
     try
     {
@@ -649,7 +649,7 @@ void Checker::MULTIPLY(string line) //multiplication
     }
 }
 
-void Checker::DIVISE(string line) //division
+void Checker::DIVISE(string& line) //division
 {
     try
     {
@@ -719,7 +719,7 @@ void Checker::DIVISE(string line) //division
     }
 }
 
-void Checker::INCREMENT(string line) //increment
+void Checker::INCREMENT(string& line) //increment
 {
     try
     {
@@ -753,7 +753,7 @@ void Checker::INCREMENT(string line) //increment
     }
 }
 
-void Checker::DECREMENT(string line) //decrement
+void Checker::DECREMENT(string& line) //decrement
 {
     try
     {

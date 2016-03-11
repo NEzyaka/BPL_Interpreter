@@ -109,12 +109,12 @@ private:
     keyword OR = "or";
 
     //arithmetic operators methods
-    void ADD(string line);
-    void SUBTRACT(string line);
-    void MULTIPLY(string line);
-    void DIVISE(string line);
-    void INCREMENT(string line);
-    void DECREMENT(string line);
+    void ADD(string& line);
+    void SUBTRACT(string& line);
+    void MULTIPLY(string& line);
+    void DIVISE(string& line);
+    void INCREMENT(string& line);
+    void DECREMENT(string& line);
 
     //arithmetic operators keywords
     keyword ADD_OPERATOR = "add";
