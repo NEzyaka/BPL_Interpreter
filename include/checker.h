@@ -43,8 +43,8 @@ private:
 
     typedef const string keyword;
     //blocks
-    keyword BEGINBLOCK = "BEGINBLOCK"; //keywords
-    keyword ENDBLOCK = "ENDBLOCK";
+    keyword BEGINBLOCK = "beginblock"; //keywords
+    keyword ENDBLOCK = "endblock";
     keyword MAINBLOCK = "MAIN";
     map<string, vector<string> >blocks; //arrays
     vector<string>blockNames;
@@ -77,25 +77,25 @@ private:
     void INVERT(string& line);
 
     //operators keywords
-    keyword PRINT_OPERATOR = "PRINT";
-    keyword INPUTVAR_OPERATOR = "INPUTVAR";
-    keyword ALERT_OPERATOR = "ALERT";
-    keyword NEXTLINE_OPERATOR = "NEXTLINE";
-    keyword CLEARSCREEN_OPERATOR = "CLEARSCREEN";
-    keyword DUMP_OPERATOR = "DUMP";
-    keyword DUMPVAR_OPERATOR = "DUMPVAR";
-    keyword COMMAND_OPERATOR = "COMMAND";
-    keyword COLOR_OPERATOR = "FONTCOLOR";
-    keyword SWAP_OPERATOR = "SWAP";
-    keyword DELETE_OPERATOR = "DELETE";
-    keyword SIZE_OPERATOR = "SIZE";
-    keyword SETVAL_OPERATOR = "SETVAL";
-    keyword DOBLOCK_OPERATOR = "DOBLOCK";
-    keyword BLOCKLIST_OPERATOR = "BLOCKLIST";
-    keyword IMPORT_OPERATOR = "IMPORT";
-    keyword INVERT_OPERATOR = "INVERT";
-    keyword AND = "AND";
-    keyword OR = "OR";
+    keyword PRINT_OPERATOR = "print";
+    keyword INPUTVAR_OPERATOR = "inputvar";
+    keyword ALERT_OPERATOR = "alert";
+    keyword NEXTLINE_OPERATOR = "nextline";
+    keyword CLEARSCREEN_OPERATOR = "clearscreen";
+    keyword DUMP_OPERATOR = "dump";
+    keyword DUMPVAR_OPERATOR = "dumpvar";
+    keyword COMMAND_OPERATOR = "command";
+    keyword COLOR_OPERATOR = "fontcolor";
+    keyword SWAP_OPERATOR = "swap";
+    keyword DELETE_OPERATOR = "delete";
+    keyword SIZE_OPERATOR = "size";
+    keyword SETVAL_OPERATOR = "setval";
+    keyword DOBLOCK_OPERATOR = "doblock";
+    keyword BLOCKLIST_OPERATOR = "blocklist";
+    keyword IMPORT_OPERATOR = "import";
+    keyword INVERT_OPERATOR = "invert";
+    keyword AND = "and";
+    keyword OR = "or";
 
     //arithmetic operators methods
     void ADD(string line);
@@ -106,10 +106,10 @@ private:
     void DECREMENT(string line);
 
     //arithmetic operators keywords
-    keyword ADD_OPERATOR = "ADD";
-    keyword SUBTRACT_OPERATOR = "SUBTRACT";
-    keyword MULTIPLY_OPERATOR = "MULTIPLY";
-    keyword DIVISE_OPERATOR = "DIVISE";
+    keyword ADD_OPERATOR = "add";
+    keyword SUBTRACT_OPERATOR = "subtract";
+    keyword MULTIPLY_OPERATOR = "multiply";
+    keyword DIVISE_OPERATOR = "divise";
     keyword INCREMENT_OPERATOR = "+";
     keyword DECREMENT_OPERATOR = "-";
 
@@ -121,19 +121,19 @@ private:
     string inputLine;
 
     //variables
-    keyword INTEGER = "INTEGER"; //keywords
-    keyword LINE = "LINE";
-    keyword BOOL = "BOOL";
-    keyword DOUBLE = "DOUBLE";
+    keyword INTEGER = "integer"; //keywords
+    keyword LINE = "line";
+    keyword BOOL = "bool";
+    keyword DOUBLE = "double";
     map<string, Variable> vars; //arrays
     map<string, string> mustInputVars;
     void declareVar(string& line); //declaring a var
 
 
     //conditions
-    keyword IF_BEGIN = "IF"; //keywords
-    keyword ELSE = "ELSE";
-    keyword ENDIF = "ENDIF";
+    keyword IF_BEGIN = "if"; //keywords
+    keyword ELSE = "else";
+    keyword ENDIF = "endif";
     bool inIf = false; //flags
     bool inNormalIf = false;
     bool inElse = false;
