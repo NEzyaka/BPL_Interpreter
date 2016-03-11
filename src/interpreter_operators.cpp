@@ -40,16 +40,16 @@ void Interpreter::PRINT(string& line) //PRINT
     line = trim(line);
     if(line.find('"') != string::npos)
     {
-        if(line.find_first_of('"') != line.find_last_of('"'))
+        if(line.find_first_of('"') != line.find_last_of('"')) //if argument contains message between "
         {
             string printValue = trim(line);
-            if((printValue.find_first_of(AND) == printValue.find_last_of(AND)) != string::npos)
+            if((printValue.find_first_of(AND) == printValue.find_last_of(AND)) != string::npos) //if AND found (argument contains variable and message)
             {
-                if(printValue.find(AND) < printValue.find_first_of('"'))
+                if(printValue.find(AND) < printValue.find_first_of('"')) //if variable stay earliear than message
                 {
-                    string varName = printValue.substr(0, printValue.find_first_of(AND));
+                    string varName = printValue.substr(0, printValue.find_first_of(AND)); //getting variable's name
                     varName = trim(varName);
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end()) //getting variable's value
                     {
                         Variable v = vars[varName];
 
@@ -63,24 +63,24 @@ void Interpreter::PRINT(string& line) //PRINT
                             cout << (v.getBool() == true ? "TRUE" : "FALSE");
                     }
 
-                    printValue = printValue.substr(printValue.find(AND)+3);
+                    printValue = printValue.substr(printValue.find(AND)+3); //getting message
                     printValue = trim(printValue);
                     printValue = printValue.substr(printValue.find_first_of('"')+1);
                     printValue = printValue.substr(0, printValue.find_first_of('"'));
                     cout << printValue;
                 }
-                else if(printValue.find(AND) > printValue.find_last_of('"'))
+                else if(printValue.find(AND) > printValue.find_last_of('"')) //if massege stay earliear than variable
                 {
-                    string varName = printValue.substr(printValue.find(AND)+3);
+                    string varName = printValue.substr(printValue.find(AND)+3); //getiing variable's name
                     varName = trim(varName);
 
-                    printValue = printValue.substr(0, printValue.find(AND));
+                    printValue = printValue.substr(0, printValue.find(AND)); //getting message
                     printValue = trim(printValue);
                     printValue = printValue.substr(printValue.find_first_of('"')+1);
                     printValue = printValue.substr(0, printValue.find_first_of('"'));
                     cout << printValue;
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end()) //getting variable's value
                     {
                         Variable v = vars[varName];
 
@@ -95,7 +95,7 @@ void Interpreter::PRINT(string& line) //PRINT
                     }
                 }
             }
-            else
+            else //if AND not found (argument contains only message)
             {
                 printValue = printValue.substr(printValue.find_first_of('"')+1);
                 printValue = printValue.substr(0, printValue.find_first_of('"'));
@@ -106,7 +106,7 @@ void Interpreter::PRINT(string& line) //PRINT
         }
         cout << "\n";
     }
-    else if(vars.find(trim(line)) != vars.end())
+    else if(vars.find(trim(line)) != vars.end()) //if argument is variable's name
     {
         Variable v = vars[trim(line)];
 
@@ -119,7 +119,7 @@ void Interpreter::PRINT(string& line) //PRINT
         else if( v.getType() == BOOL)
             cout << (v.getBool() == true ? "TRUE" : "FALSE") << endl;
     }
-    else if(isNum(line))
+    else if(isNum(line)) //if argument is a number
     {
         int buf = 0;
         stringstream convert(line);
@@ -131,13 +131,13 @@ void Interpreter::PRINT(string& line) //PRINT
 
 void Interpreter::INPUTVAR(string& line) //INPUTVAR
 {
-    string varName = line.substr(INPUTVAR_OPERATOR.size());
+    string varName = line.substr(INPUTVAR_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
     string invitation;
 
     if(!varName.empty())
     {
-        if(varName.find_first_of('"') != varName.find_last_of('"'))
+        if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
         {
             invitation = varName;
             invitation = invitation.substr(invitation.find_first_of('"')+1);
@@ -147,18 +147,19 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
         }
         else invitation = "";
 
-        if(varName.find(AND) != std::string::npos)
+        if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
         {
             size_t andPosition = varName.find(AND);
-            string firstVarName = varName.substr(0, andPosition);
+            string firstVarName = varName.substr(0, andPosition); //getting first variable's name
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(andPosition+3);
+            string secondVarName = varName.substr(andPosition+3); //getting second variable's name
             secondVarName = trim(secondVarName);
 
             if(!firstVarName.empty() && !secondVarName.empty())
             {
-                if(mustInputVars.find(firstVarName) != mustInputVars.end())
+                //first variable
+                if(mustInputVars.find(firstVarName) != mustInputVars.end()) //if first variable declared, but hasn't got a value
                 {
                     string varType = mustInputVars[firstVarName];
                     Variable tmp_variable;
@@ -212,7 +213,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     mustInputVars.erase(mustInputVars.find(firstVarName));
                     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
                 }
-                else if(vars.find(firstVarName) != vars.end())
+                else if(vars.find(firstVarName) != vars.end()) //if first variable declared end has got a value
                 {
                     Variable tmp_variable = vars[firstVarName];
                     string value = "";
@@ -263,7 +264,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     vars.erase(vars.find(firstVarName));
                     vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
                 }
-                if(mustInputVars.find(secondVarName) != mustInputVars.end())
+
+                //second variable
+                if(mustInputVars.find(secondVarName) != mustInputVars.end()) //if second variable declared, but hasn't got a value
                 {
                     string varType = mustInputVars[secondVarName];
                     Variable tmp_variable;
@@ -317,7 +320,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     mustInputVars.erase(mustInputVars.find(secondVarName));
                     vars.insert(pair<string, Variable> (secondVarName, tmp_variable));
                 }
-                else if(vars.find(secondVarName) != vars.end())
+                else if(vars.find(secondVarName) != vars.end()) //if second variable declared and has got a value
                 {
                     Variable tmp_variable = vars[secondVarName];
                     string value = "";
@@ -370,9 +373,9 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 }
             }
         }
-        else
+        else //only one variable
         {
-            if(mustInputVars.find(varName) != mustInputVars.end()) //inputing value of variable without value
+            if(mustInputVars.find(varName) != mustInputVars.end()) //if variable declared, but hasn't got a value
             {
                 string varType = mustInputVars[varName];
                 Variable tmp_variable;
@@ -426,7 +429,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 mustInputVars.erase(mustInputVars.find(varName));
                 vars.insert(pair<string, Variable> (varName, tmp_variable));
             }
-            else if(vars.find(varName) != vars.end()) //inputing new value of variable
+            else if(vars.find(varName) != vars.end()) //if variable declared and has got a value
             {
                 Variable tmp_variable = vars[varName];
 
@@ -484,17 +487,22 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
 void Interpreter::ALERT() //ALERT
 {
-    cout << "\a";
+    cout << "\a"; //beep
 }
 
 void Interpreter::NEXTLINE() //NEXTLINE
 {
-    cout << endl << endl;
+    cout << endl << endl; //doesn't work
 }
 
 void Interpreter::CLEARSCREEN() //CLEARSCREEN
 {
+    #ifdef _WIN32
     system("cls");
+    #else
+    system("clear");
+    #endif
+
     cout << "Successful interpreting!\n" << "File: " << filename << "\nOutput:" << endl;
 }
 
@@ -503,11 +511,9 @@ void Interpreter::DUMP() //DUMP
     int i = 1;
     for(auto iter = vars.begin(); iter != vars.end(); iter++)
     {
-        //cout << i << ": " << iter->first << " -> ";
-
         Variable v = iter->second;
 
-        if(v.getType() == LINE || v.getType() == INTEGER || v.getType() == DOUBLE || v.getType() == BOOL)
+        if(v.getType() == LINE || v.getType() == INTEGER || v.getType() == DOUBLE || v.getType() == BOOL) //checking for trash
         {
             cout << i << ": " << iter->first << " -> ";
 
@@ -526,30 +532,23 @@ void Interpreter::DUMP() //DUMP
 
 void Interpreter::DUMPVAR(string& line) //DUMPVAR
 {
-    string varName = line.substr(DUMPVAR_OPERATOR.size());
+    string varName = line.substr(DUMPVAR_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
 
     if(!varName.empty())
     {
-        if(varName.find(AND) != string::npos)
+        if(varName.find(AND) != string::npos) //if argument contains AND (2 variables)
         {
             Variable tmp_variable;
             Variable tmp_variable2;
 
             size_t andPosition = varName.find(AND);
-            string firstVarName = varName.substr(0, andPosition);
+            string firstVarName = varName.substr(0, andPosition); //getting first variable's name
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(andPosition+3);
+            string secondVarName = varName.substr(andPosition+3); //getting second variable's name
             secondVarName = trim(secondVarName);
 
-            stringstream convert(secondVarName);
-            double plusVal = 0;
-            convert >> plusVal;
-            convert.flush();
-
-            if(plusVal == 0)
-            {
                 if(!firstVarName.empty())
                     tmp_variable = vars[firstVarName];
                 if(!secondVarName.empty())
@@ -573,9 +572,8 @@ void Interpreter::DUMPVAR(string& line) //DUMPVAR
                     cout << secondVarName << " -> " << tmp_variable2.getDouble() << " [DOUBLE, size: " << sizeof(tmp_variable2.getDouble()) << " bytes]" << endl;
                 else if(tmp_variable2.getType() == BOOL)
                     cout << secondVarName << " -> " << (tmp_variable2.getBool() == true ? "TRUE" : "FALSE") << " [BOOL, size: " << sizeof(tmp_variable2.getBool()) << " bytes]" << endl;
-            }
         }
-        else
+        else //only one variable
         {
             Variable v = vars[varName];
 
@@ -593,25 +591,18 @@ void Interpreter::DUMPVAR(string& line) //DUMPVAR
 
 void Interpreter::COMMAND(string& line) //COMMAND
 {
-    string val = line.substr(COMMAND_OPERATOR.size());
-    if(!val.empty())
-    {
+    string val = line.substr(COMMAND_OPERATOR.size()); //getting command prompt argument
         string argValue = "start " + val;
-        if(trim(argValue) != "start")
-        {
             argValue = trim(argValue);
-            system(argValue.c_str());
-        }
-    }
+
+            system(argValue.c_str()); //running commant prompt with received argument
 }
 
 void Interpreter::FONTCOLOR(string& line) //FONTCOLOR
 {
-    string colorValue = line.substr(COLOR_OPERATOR.size());
+    string colorValue = line.substr(COLOR_OPERATOR.size()); //getting font color
     colorValue = trim(colorValue);
 
-    if(!colorValue.empty())
-    {
         string arg = "color ";
         if(colorValue == "BLACK" || colorValue == "black")
             arg.append("0");
@@ -646,8 +637,7 @@ void Interpreter::FONTCOLOR(string& line) //FONTCOLOR
         else if(colorValue == "LIGHTWHITE" || colorValue == "lightwhite")
             arg.append("f");
 
-        system(arg.c_str());
-    }
+        system(arg.c_str()); //setting font color
 }
 
 void Interpreter::SWAP(string& line) //SWAP
@@ -655,10 +645,10 @@ void Interpreter::SWAP(string& line) //SWAP
     if(!line.empty())
     {
         size_t operatorPosition = line.find(SWAP_OPERATOR);
-        string firstVarName = line.substr(0, operatorPosition);
+        string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
         firstVarName = trim(firstVarName);
 
-        string secondVarName = line.substr(SWAP_OPERATOR.size()+1);
+        string secondVarName = line.substr(firstVarName.size()+SWAP_OPERATOR.size()+1); //getting second variable's name
         secondVarName = trim(secondVarName);
 
         if(!firstVarName.empty() && !secondVarName.empty())
@@ -699,10 +689,10 @@ void Interpreter::SWAP(string& line) //SWAP
                 tmp_variable2.setBool(firstVal);
             }
 
-            vars.erase(vars.find(firstVarName));
+            vars.erase(vars.find(firstVarName)); //clear old values
             vars.erase(vars.find(secondVarName));
 
-            vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
+            vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push new values
             vars.insert(pair<string, Variable> (secondVarName, tmp_variable2));
         }
     }
@@ -710,23 +700,24 @@ void Interpreter::SWAP(string& line) //SWAP
 
 void Interpreter::DELETE(string& line) //DELETE
 {
-    string varName = line.substr(DELETE_OPERATOR.size());
+    string varName = line.substr(DELETE_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
 
     if(!varName.empty())
     {
-        if(varName.find(AND) != string::npos)
+        if(varName.find(AND) != string::npos) //if AND found (2 variables)
         {
             Variable tmp_variable;
             Variable tmp_variable2;
 
             size_t andPosition = varName.find(AND);
-            string firstVarName = varName.substr(0, andPosition);
+            string firstVarName = varName.substr(0, andPosition); //getting first variable's name
             firstVarName = trim(firstVarName);
 
-            string secondVarName = varName.substr(andPosition+3);
+            string secondVarName = varName.substr(andPosition+3); //getting second variable's name
             secondVarName = trim(secondVarName);
 
+            //earase variables
             if(!firstVarName.empty())
                 if(vars.find(firstVarName) != vars.end())
                     vars.erase(vars.find(firstVarName));
@@ -738,8 +729,9 @@ void Interpreter::DELETE(string& line) //DELETE
                 else if(mustInputVars.find(secondVarName) != mustInputVars.end())
                     mustInputVars.erase(mustInputVars.find(secondVarName));
         }
-        else
+        else //only one variable
         {
+            //erase variable
             if(!varName.empty())
                 if(vars.find(varName) != vars.end())
                     vars.erase(vars.find(varName));
@@ -751,7 +743,7 @@ void Interpreter::DELETE(string& line) //DELETE
 
 void Interpreter::SIZE(string& line) //SIZE
 {
-    string varName = line.substr(SIZE_OPERATOR.size());
+    string varName = line.substr(SIZE_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
 
     if(!varName.empty())
@@ -778,13 +770,13 @@ void Interpreter::SETVAL(string& line) //SETVAL
     if(!line.empty())
     {
         size_t operatorPosition = line.find(SETVAL_OPERATOR);
-        string varName = line.substr(0, operatorPosition);
+        string varName = line.substr(0, operatorPosition); //getting variable's name
         varName = trim(varName);
 
-        string varVal = line.substr(SETVAL_OPERATOR.size()+1);
+        string varVal = line.substr(varName.size()+SETVAL_OPERATOR.size()+1); //getting new value of variable
         varVal = trim(varVal);
 
-        if(mustInputVars.find(varName) != mustInputVars.end())
+        if(mustInputVars.find(varName) != mustInputVars.end()) //if variable declared, but hasn't got a value
         {
             string varType = mustInputVars[varName];
             Variable tmp_variable;
@@ -831,7 +823,7 @@ void Interpreter::SETVAL(string& line) //SETVAL
             mustInputVars.erase(mustInputVars.find(varName));
             vars.insert(pair<string, Variable> (varName, tmp_variable));
         }
-        else if(vars.find(varName) != vars.end())
+        else if(vars.find(varName) != vars.end()) //if variable declared and has got a value
         {
             Variable tmp_variable = vars[varName];
 
@@ -873,30 +865,28 @@ void Interpreter::SETVAL(string& line) //SETVAL
                 tmp_variable.setBool(boolValue);
             }
 
-            vars.erase(vars.find(varName));
-            vars.insert(pair<string, Variable> (varName, tmp_variable));
+            vars.erase(vars.find(varName)); //erase an old value
+            vars.insert(pair<string, Variable> (varName, tmp_variable)); //push a new value
         }
     }
 }
 
 void Interpreter::DOBLOCK(string& line) //DOBLOCK
 {
-    line = line.substr(line.find_first_of(' '));
+    line = line.substr(line.find_first_of(' ')); //getting block's name
     line = trim(line);
 
-    map<string, vector<string> >::const_iterator iter;
-    for(iter = blocks.begin(); iter != blocks.end(); iter++)
+    for(auto iter = blocks.begin(); iter != blocks.end(); iter++)
     {
-        if(iter->first == line)
+        if(iter->first == line) //if block exists, execute them
             doBlock(iter->second);
     }
 }
 
 void Interpreter::BLOCKLIST() //BLOCKLIST
 {
-    map<string, vector<string> >::const_iterator iter;
     int ix = 1;
-    for(iter = blocks.begin(); iter != blocks.end(); iter++, ix++)
+    for(auto iter = blocks.begin(); iter != blocks.end(); iter++, ix++)
     {
         switch(iter->second.size()-1)
         {
@@ -911,11 +901,11 @@ void Interpreter::BLOCKLIST() //BLOCKLIST
 
 void Interpreter::IMPORT(string& file) //IMPORT
 {
-    file = file.substr(file.find_first_of(' '));
+    file = file.substr(file.find_first_of(' ')); //getting file's path
     file = trim(file);
 
     ifstream input(file.c_str());
-    if(input.is_open())
+    if(input.is_open()) //if file exists, read and push to array content of it
     {
         for(inputLine = readCode(input); !input.eof(); inputLine = readCode(input))
             code.push_back(inputLine);
@@ -925,7 +915,7 @@ void Interpreter::IMPORT(string& file) //IMPORT
 
 void Interpreter::INVERT(string& line) //INVERT
 {
-    line = line.substr(INVERT_OPERATOR.size());
+    line = line.substr(INVERT_OPERATOR.size()); //getting variable's name
     line = trim(line);
 
     Variable tmp_variable = vars[line];
@@ -940,6 +930,7 @@ void Interpreter::INVERT(string& line) //INVERT
         buff[in.size()] = '\0';
 
         tmp_variable.setString(buff);
+        delete buff;
     }
     else if(tmp_variable.getType() == INTEGER) //INTEGER
     {
@@ -974,10 +965,10 @@ void Interpreter::ADD(string line) //addition
     Variable tmp_variable2;
 
     size_t operatorPosition = line.find(ADD_OPERATOR);
-    string firstVarName = line.substr(0, operatorPosition);
+    string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(firstVarName.size()+ADD_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+ADD_OPERATOR.size()+1); //getting second variable's name
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1017,8 +1008,8 @@ void Interpreter::ADD(string line) //addition
             tmp_variable.setDouble(tmp_variable.getDouble() + plusVal);
     }
 
-    vars.erase(vars.find(firstVarName));
-    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
+    vars.erase(vars.find(firstVarName)); //erase an old value
+    vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
 void Interpreter::SUBTRACT(string line) //subtraction
@@ -1027,10 +1018,10 @@ void Interpreter::SUBTRACT(string line) //subtraction
     Variable tmp_variable2;
 
     size_t operatorPosition = line.find(SUBTRACT_OPERATOR);
-    string firstVarName = line.substr(0, operatorPosition);
+    string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(firstVarName.size()+SUBTRACT_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+SUBTRACT_OPERATOR.size()+1); //getting second variable's name
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1070,8 +1061,8 @@ void Interpreter::SUBTRACT(string line) //subtraction
             tmp_variable.setDouble(tmp_variable.getDouble() - subtrVal);
     }
 
-    vars.erase(vars.find(firstVarName));
-    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
+    vars.erase(vars.find(firstVarName)); //erase an old value
+    vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
 void Interpreter::MULTIPLY(string line) //multiplication
@@ -1080,10 +1071,10 @@ void Interpreter::MULTIPLY(string line) //multiplication
     Variable tmp_variable2;
 
     size_t operatorPosition = line.find(MULTIPLY_OPERATOR);
-    string firstVarName = line.substr(0, operatorPosition);
+    string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(firstVarName.size()+MULTIPLY_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+MULTIPLY_OPERATOR.size()+1); //getting second variable's name
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1123,8 +1114,8 @@ void Interpreter::MULTIPLY(string line) //multiplication
             tmp_variable.setDouble(tmp_variable.getDouble() * multiplVal);
     }
 
-    vars.erase(vars.find(firstVarName));
-    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
+    vars.erase(vars.find(firstVarName)); //erase an aold value
+    vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
 void Interpreter::DIVISE(string line) //division
@@ -1133,10 +1124,10 @@ void Interpreter::DIVISE(string line) //division
     Variable tmp_variable2;
 
     size_t operatorPosition = line.find(DIVISE_OPERATOR);
-    string firstVarName = line.substr(0, operatorPosition);
+    string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
     firstVarName = trim(firstVarName);
 
-    string secondVarName = line.substr(firstVarName.size()+DIVISE_OPERATOR.size()+1);
+    string secondVarName = line.substr(firstVarName.size()+DIVISE_OPERATOR.size()+1); //getting second variable's name
     secondVarName = trim(secondVarName);
 
     stringstream convert(secondVarName);
@@ -1176,8 +1167,8 @@ void Interpreter::DIVISE(string line) //division
             else tmp_variable.setDouble(tmp_variable.getDouble() / divVal);
     }
 
-    vars.erase(vars.find(firstVarName));
-    vars.insert(pair<string, Variable> (firstVarName, tmp_variable));
+    vars.erase(vars.find(firstVarName)); //erase an old value
+    vars.insert(pair<string, Variable> (firstVarName, tmp_variable)); //push a new value
 }
 
 void Interpreter::INCREMENT(string line) //increment
@@ -1185,7 +1176,7 @@ void Interpreter::INCREMENT(string line) //increment
     Variable tmp_variable;
 
     size_t operatorPosition = line.find(INCREMENT_OPERATOR);
-    string varName = line.substr(0, operatorPosition);
+    string varName = line.substr(0, operatorPosition); //getting variable's name
     varName = trim(varName);
 
     tmp_variable = vars[varName];
@@ -1195,8 +1186,8 @@ void Interpreter::INCREMENT(string line) //increment
     else if(tmp_variable.getType() == DOUBLE)
         tmp_variable.setDouble(tmp_variable.getDouble()+1);
 
-    vars.erase(vars.find(varName));
-    vars.insert(pair<string, Variable> (varName, tmp_variable));
+    vars.erase(vars.find(varName)); //erase an old value
+    vars.insert(pair<string, Variable> (varName, tmp_variable)); //push a new value
 }
 
 void Interpreter::DECREMENT(string line) //decrement
@@ -1204,7 +1195,7 @@ void Interpreter::DECREMENT(string line) //decrement
     Variable tmp_variable;
 
     line = trim(line);
-    string varName = line.substr(DECREMENT_OPERATOR.size());
+    string varName = line.substr(DECREMENT_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
 
     tmp_variable = vars[varName];
@@ -1214,6 +1205,6 @@ void Interpreter::DECREMENT(string line) //decrement
     else if(tmp_variable.getType() == DOUBLE)
         tmp_variable.setDouble(tmp_variable.getDouble()-1);
 
-    vars.erase(vars.find(varName));
-    vars.insert(pair<string, Variable> (varName, tmp_variable));
+    vars.erase(vars.find(varName)); //erase an old value
+    vars.insert(pair<string, Variable> (varName, tmp_variable)); //push a new value
 }

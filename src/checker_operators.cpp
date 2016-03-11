@@ -38,9 +38,9 @@ void Checker::PRINT(string& line) //PRINT
     {
         string printValue = line.substr(line.find_first_of(' '));
         printValue = trim(printValue);
-        if(printValue.find('"') != string::npos)
+        if(printValue.find('"') != string::npos) //if argument contains message
         {
-            if(printValue.find_first_of('"') == printValue.find_last_of('"'))
+            if(printValue.find_first_of('"') == printValue.find_last_of('"')) //if argument contains only one "
             {
                 isOK = false;
 
@@ -50,7 +50,7 @@ void Checker::PRINT(string& line) //PRINT
                     errors.push_back(errorException(line, "Expected '\"' at end of message '" + printValue.substr(1) + "'"));
             }
         }
-        else
+        else //if argument contains only variable's name
         {
             isOK = false;
 
@@ -59,7 +59,7 @@ void Checker::PRINT(string& line) //PRINT
 
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of PRINT operator"));
@@ -70,36 +70,41 @@ void Checker::INPUTVAR(string& line) //INPUTVAR
 {
     try
     {
-        string varName = line.substr(INPUTVAR_OPERATOR.size());
+        string varName = line.substr(INPUTVAR_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
         string invitation;
 
         if(!varName.empty())
         {
-            if(varName.find(AND) != std::string::npos)
+            if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
             {
                 size_t andPosition = varName.find(AND);
-                string firstVarName = varName.substr(0, andPosition);
+                string firstVarName = varName.substr(0, andPosition); //getting first variable's name
                 firstVarName = trim(firstVarName);
 
-                string secondVarName = varName.substr(andPosition+3);
+                string secondVarName = varName.substr(andPosition+3); //getting second variable's name
                 secondVarName = trim(secondVarName);
 
                 if(!firstVarName.empty() && !secondVarName.empty())
                 {
-                    isOK = false;
                     if((mustInputVars.find(firstVarName) == mustInputVars.end()) || (mustInputVars.find(secondVarName) == mustInputVars.end()) || (vars.find(firstVarName) == vars.end()) || (vars.find(secondVarName) == vars.end()))
                     {
-                        if((mustInputVars.find(firstVarName) == mustInputVars.end()) && (vars.find(firstVarName) == vars.end()))
+                        if((mustInputVars.find(firstVarName) == mustInputVars.end()) && (vars.find(firstVarName) == vars.end())) //if first variable is undeclared
+                        {
+                            isOK = false;
                             errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-                        if((mustInputVars.find(secondVarName) == mustInputVars.end()) && (vars.find(secondVarName) == vars.end()))
+                        }
+                        if((mustInputVars.find(secondVarName) == mustInputVars.end()) && (vars.find(secondVarName) == vars.end())) //if second variable is undeclared
+                        {
+                            isOK = false;
                             errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
+                        }
                     }
                 }
             }
-            else
+            else //only one variable
             {
-                if((mustInputVars.find(varName) == mustInputVars.end()) && (vars.find(varName) == vars.end()))
+                if((mustInputVars.find(varName) == mustInputVars.end()) && (vars.find(varName) == vars.end())) //if variable is undeclared
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
@@ -107,7 +112,7 @@ void Checker::INPUTVAR(string& line) //INPUTVAR
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of INPUTVAR operator"));
@@ -138,18 +143,18 @@ void Checker::DUMPVAR(string& line) //DUMPVAR
 {
     try
     {
-        string varName = line.substr(DUMPVAR_OPERATOR.size());
+        string varName = line.substr(DUMPVAR_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
 
         if(!varName.empty())
         {
-            if(varName.find(AND) != std::string::npos)
+            if(varName.find(AND) != std::string::npos) //if atgument contains (2 variables)
             {
                 size_t andPosition = varName.find(AND);
-                string firstVarName = varName.substr(0, andPosition);
+                string firstVarName = varName.substr(0, andPosition); //getting first variable's name
                 firstVarName = trim(firstVarName);
 
-                string secondVarName = varName.substr(andPosition+3);
+                string secondVarName = varName.substr(andPosition+3); //getting second variable's name
                 secondVarName = trim(secondVarName);
 
                 if(!firstVarName.empty() && !secondVarName.empty())
@@ -158,26 +163,27 @@ void Checker::DUMPVAR(string& line) //DUMPVAR
                     {
                         isOK = false;
 
-                        if(vars.find(firstVarName) == vars.end())
+                        if(vars.find(firstVarName) == vars.end()) //if first variable is undeclared
                             errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-                        if(vars.find(secondVarName) == vars.end())
+                        if(vars.find(secondVarName) == vars.end()) //if second variable is undeclared
                             errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
                     }
                 }
             }
-            else
+            else //only one variable
             {
                 if(!varName.empty())
                 {
-                    isOK = false;
-
-                    if((vars.find(varName) == vars.end()) && (vars.find(varName) == vars.end()))
+                    if(vars.find(varName) == vars.end()) //if variable is undeclared
+                    {
+                        isOK = false;
                         errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
+                    }
                 }
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of INPUTVAR operator"));
@@ -188,10 +194,10 @@ void Checker::COMMAND(string& line) //COMMAND
 {
     try
     {
-        string val = line.substr(COMMAND_OPERATOR.size());
+        string val = line.substr(COMMAND_OPERATOR.size()); //getting command prompt argument
         val = trim(val);
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of COMMAND operator"));
@@ -202,26 +208,27 @@ void Checker::FONTCOLOR(string& line) //FONTCOLOR
 {
     try
     {
-        string colorValue = line.substr(COLOR_OPERATOR.size());
+        string colorValue = line.substr(COLOR_OPERATOR.size()); //getting font color
         colorValue = trim(colorValue);
 
         if(!colorValue.empty())
         {
-            if(colorValue != "BLACK" && colorValue != "black" && colorValue != "BLUE" && colorValue != "blue" &&
-                    colorValue != "GREEN" && colorValue != "green" && colorValue != "CYAN" && colorValue != "cyan" &&
-                    colorValue != "RED" && colorValue != "red" && colorValue != "PURPLE" && colorValue != "purple" &&
-                    colorValue != "YELLOW" && colorValue != "yellow" && colorValue != "WHITE" && colorValue != "white" &&
-                    colorValue != "GRAY" && colorValue != "gray" && colorValue != "LIGHTGRAY" && colorValue != "lightgray" &&
-                    colorValue != "LIGHTGREEN" && colorValue != "lightgreen" && colorValue != "LIGHTBLUE" && colorValue != "lightblue" &&
-                    colorValue != "LIGHTRED" && colorValue != "lightred" && colorValue != "LIGHTPURPLE" && colorValue != "lightpurple" &&
-                    colorValue != "LIGHTYELLOW" && colorValue != "lightyellow" && colorValue != "LIGHTWHITE" && colorValue != "lightwhite")
+            if(colorValue != "black" && colorValue != "blue" &&
+                    colorValue != "green" && colorValue != "cyan" &&
+                    colorValue != "red" && colorValue != "purple" &&
+                    colorValue != "yellow" && colorValue != "white" &&
+                    colorValue != "gray" && colorValue != "lightgray" &&
+                    colorValue != "lightgreen" && colorValue != "lightblue" &&
+                    colorValue != "lightred" && colorValue != "lightpurple" &&
+                    colorValue != "lightyellow" && colorValue != "lightwhite")
             {
+                //if font color is invalid
                 isOK = false;
                 errors.push_back(errorException(line, "Invalid color: '" + colorValue + "'"));
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of FONTCOLOR operator"));
@@ -235,28 +242,26 @@ void Checker::SWAP(string& line) //SWAP
         if(!line.empty())
         {
             size_t operatorPosition = line.find(SWAP_OPERATOR);
-            string firstVarName = line.substr(0, operatorPosition);
+            string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
             firstVarName = trim(firstVarName);
 
-            string secondVarName = line.substr(firstVarName.size()+SWAP_OPERATOR.size()+1);
+            string secondVarName = line.substr(firstVarName.size()+SWAP_OPERATOR.size()+1); //getting second variable's name
             secondVarName = trim(secondVarName);
-
-            bool doSwap = false;
 
             if(!firstVarName.empty() && !secondVarName.empty())
             {
-                if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end()))
+                if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end())) //if variables are declared and have a value
                 {
                     Variable tmp_variable = vars[firstVarName];
                     Variable tmp_variable2 = vars[secondVarName];
 
-                    if(tmp_variable.getType() != tmp_variable2.getType())
+                    if(tmp_variable.getType() != tmp_variable2.getType()) //if types of variables do not match
                     {
                         isOK = false;
                         errors.push_back(errorException(line, "Types of variables '" + firstVarName + "' and '" + secondVarName + "' do not match"));
                     }
                 }
-                else
+                else //if variables are undeclared and haven't got a value
                 {
                     isOK = false;
 
@@ -268,7 +273,7 @@ void Checker::SWAP(string& line) //SWAP
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of SWAP operator"));
@@ -279,38 +284,39 @@ void Checker::DELETE(string& line) //DELETE
 {
     try
     {
-        string varName = line.substr(DELETE_OPERATOR.size());
+        string varName = line.substr(DELETE_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
 
         if(!varName.empty())
         {
-            if(varName.find(AND) != std::string::npos)
+            if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
             {
                 size_t andPosition = varName.find(AND);
-                string firstVarName = varName.substr(0, andPosition);
+                string firstVarName = varName.substr(0, andPosition); //getting first variable's name
                 firstVarName = trim(firstVarName);
 
-                string secondVarName = varName.substr(andPosition+3);
+                string secondVarName = varName.substr(andPosition+3); //second variable's name
                 secondVarName = trim(secondVarName);
 
-                if(!firstVarName.empty())
-                    if((vars.find(firstVarName) == vars.end()) || (mustInputVars.find(firstVarName) == mustInputVars.end()))
+                if(!firstVarName.empty() && !secondVarName.empty())
+                {
+                    if((vars.find(firstVarName) == vars.end()) && (mustInputVars.find(firstVarName) == mustInputVars.end())) //if first variable is undeclared
                     {
                         isOK = false;
                         errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
                     }
-                if(!secondVarName.empty())
-                    if((vars.find(secondVarName) == vars.end()) || (mustInputVars.find(secondVarName) == mustInputVars.end()))
+                    if((vars.find(secondVarName) == vars.end()) && (mustInputVars.find(secondVarName) == mustInputVars.end())) //if second variable is undeclared
                     {
                         isOK = false;
                         errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
                     }
+                }
             }
-            else
+            else //only one variable
             {
                 if(!varName.empty())
                 {
-                    if((vars.find(varName) == vars.end()) || (mustInputVars.find(varName) == mustInputVars.end()))
+                    if((vars.find(varName) == vars.end()) && (mustInputVars.find(varName) == mustInputVars.end())) // if variable is undeclared
                     {
                         isOK = false;
                         errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
@@ -319,7 +325,7 @@ void Checker::DELETE(string& line) //DELETE
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of DELETE operator"));
@@ -330,19 +336,19 @@ void Checker::SIZE(string& line) //SIZE
 {
     try
     {
-        string varName = line.substr(SIZE_OPERATOR.size());
+        string varName = line.substr(SIZE_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
 
         if(!varName.empty())
         {
-            if(vars.find(varName) == vars.end())
+            if(vars.find(varName) == vars.end()) //if variable is undeclared
             {
                 isOK = false;
                 errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
             }
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of SIZE operator"));
@@ -354,19 +360,19 @@ void Checker::SETVAL(string& line) //SETVAL
     try
     {
         size_t operatorPosition = line.find(SETVAL_OPERATOR);
-        string varName = line.substr(0, operatorPosition);
+        string varName = line.substr(0, operatorPosition); //getting variable's name
         varName = trim(varName);
 
-        string varVal = line.substr(SETVAL_OPERATOR.size()+1);
+        string varVal = line.substr(varName.size()+SETVAL_OPERATOR.size()+1); //getting new variable's value
         varVal = trim(varVal);
 
-        if((vars.find(varName) == vars.end()) && (mustInputVars.find(varName) == mustInputVars.end()))
+        if((vars.find(varName) == vars.end()) && (mustInputVars.find(varName) == mustInputVars.end())) //if variable is undeclared
         {
             isOK = false;
             errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of SETVAL operator"));
@@ -377,16 +383,16 @@ void Checker::DOBLOCK(string& line) //DOBLOCK
 {
     try
     {
-        string blockName = line.substr(line.find_first_of(' '));
+        string blockName = line.substr(line.find_first_of(' ')); //getting vlock's name
         blockName = trim(blockName);
 
-        if(blocks.find(blockName) == blocks.end())
+        if(blocks.find(blockName) == blocks.end()) //if block is undeclared
         {
             isOK = false;
             errors.push_back(errorException(line, "Undeclared block '" + blockName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of DOBLOCK operator"));
@@ -402,17 +408,17 @@ void Checker::IMPORT(string& file) //IMPORT
 {
     try
     {
-        string fileName = file.substr(file.find_first_of(' '));
+        string fileName = file.substr(file.find_first_of(' ')); //getting file's path
         fileName = trim(fileName);
 
         ifstream input(fileName.c_str());
-        if(!input.is_open())
+        if(!input.is_open()) //if file doesn't exists
         {
             isOK = false;
             errors.push_back(errorException(file, "File '" + fileName + "' does not exist"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(file, "Invalid argument of IMPORT operator"));
@@ -423,16 +429,16 @@ void Checker::INVERT(string& line) //INVERT
 {
     try
     {
-        string varName = line.substr(INVERT_OPERATOR.size());
+        string varName = line.substr(INVERT_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
 
-        if(vars.find(varName) == vars.end())
+        if(vars.find(varName) == vars.end()) //if variable is undeclared
         {
             isOK = false;
             errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of INVERT operator"));
@@ -447,19 +453,19 @@ void Checker::ADD(string line) //addition
     try
     {
         size_t operatorPosition = line.find(ADD_OPERATOR);
-        string firstVarName = line.substr(0, operatorPosition);
+        string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
         firstVarName = trim(firstVarName);
 
-        string secondVarName = line.substr(firstVarName.size()+ADD_OPERATOR.size()+1);
+        string secondVarName = line.substr(firstVarName.size()+ADD_OPERATOR.size()+1); //getting second variable's name
         secondVarName = trim(secondVarName);
 
-        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end()))
+        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end())) //if first variable is declared and have a value and second operand is declared variable with a value
         {
             if(firstVarName == secondVarName)
             {
                 Variable tmp_variable = vars[firstVarName];
 
-                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or DOUBLE
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
@@ -470,14 +476,14 @@ void Checker::ADD(string line) //addition
                 Variable tmp_variable = vars[firstVarName];
                 Variable tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() != tmp_variable2.getType())
+                if(tmp_variable.getType() != tmp_variable2.getType()) //if types of variables do not match
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "Types of variables '" + firstVarName + "' and '" + secondVarName + "' do not match"));
                 }
             }
         }
-        else if(isNum(secondVarName))
+        else if(isNum(secondVarName)) //if second operand is a number
         {
             stringstream convert(secondVarName);
             double plusVal = 0;
@@ -486,23 +492,23 @@ void Checker::ADD(string line) //addition
 
             Variable tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or DOUBLE
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
         }
-        else
+        else //something else
         {
             isOK = false;
 
-            if(vars.find(firstVarName) == vars.end())
+            if(vars.find(firstVarName) == vars.end()) //if first variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-            if(vars.find(secondVarName) == vars.end())
+            if(vars.find(secondVarName) == vars.end()) //if second variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of ADD operator"));
@@ -514,19 +520,19 @@ void Checker::SUBTRACT(string line) //subtraction
     try
     {
         size_t operatorPosition = line.find(SUBTRACT_OPERATOR);
-        string firstVarName = line.substr(0, operatorPosition);
+        string firstVarName = line.substr(0, operatorPosition); //getting second variable's name
         firstVarName = trim(firstVarName);
 
-        string secondVarName = line.substr(firstVarName.size()+SUBTRACT_OPERATOR.size()+1);
+        string secondVarName = line.substr(firstVarName.size()+SUBTRACT_OPERATOR.size()+1); //getting second variable's name
         secondVarName = trim(secondVarName);
 
-        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end()))
+        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end())) //if first variable is declared and have a value and second operand is declared variable with a value
         {
             if(firstVarName == secondVarName)
             {
                 Variable tmp_variable = vars[firstVarName];
 
-                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
@@ -537,14 +543,14 @@ void Checker::SUBTRACT(string line) //subtraction
                 Variable tmp_variable = vars[firstVarName];
                 Variable tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() != tmp_variable2.getType())
+                if(tmp_variable.getType() != tmp_variable2.getType()) //if types of variables do not match
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "Types of variables '" + firstVarName + "' and '" + secondVarName + "' do not match"));
                 }
             }
         }
-        else if(isNum(secondVarName))
+        else if(isNum(secondVarName)) //if second operand is number
         {
             stringstream convert(secondVarName);
             double plusVal = 0;
@@ -553,23 +559,23 @@ void Checker::SUBTRACT(string line) //subtraction
 
             Variable tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)  //if type of variable isn't INTEGER or double
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
         }
-        else
+        else //something else
         {
             isOK = false;
 
-            if(vars.find(firstVarName) == vars.end())
+            if(vars.find(firstVarName) == vars.end()) //if first variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-            if(vars.find(secondVarName) == vars.end())
+            if(vars.find(secondVarName) == vars.end()) //if second variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of SUBTRACT operator"));
@@ -581,19 +587,19 @@ void Checker::MULTIPLY(string line) //multiplication
     try
     {
         size_t operatorPosition = line.find(MULTIPLY_OPERATOR);
-        string firstVarName = line.substr(0, operatorPosition);
+        string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
         firstVarName = trim(firstVarName);
 
-        string secondVarName = line.substr(firstVarName.size()+MULTIPLY_OPERATOR.size()+1);
+        string secondVarName = line.substr(firstVarName.size()+MULTIPLY_OPERATOR.size()+1); //getting second variable's name
         secondVarName = trim(secondVarName);
 
-        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end()))
+        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end())) //if first variable is declared and have a value and second operand is declared variable with a value
         {
             if(firstVarName == secondVarName)
             {
                 Variable tmp_variable = vars[firstVarName];
 
-                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
@@ -604,14 +610,14 @@ void Checker::MULTIPLY(string line) //multiplication
                 Variable tmp_variable = vars[firstVarName];
                 Variable tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() != tmp_variable2.getType())
+                if(tmp_variable.getType() != tmp_variable2.getType()) //if types of variables do not match
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "Types of variables '" + firstVarName + "' and '" + secondVarName + "' do not match"));
                 }
             }
         }
-        else if(isNum(secondVarName))
+        else if(isNum(secondVarName)) //if second operand is number
         {
             stringstream convert(secondVarName);
             double plusVal = 0;
@@ -620,23 +626,23 @@ void Checker::MULTIPLY(string line) //multiplication
 
             Variable tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
         }
-        else
+        else //something else
         {
             isOK = false;
 
-            if(vars.find(firstVarName) == vars.end())
+            if(vars.find(firstVarName) == vars.end()) //if first variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-            if(vars.find(secondVarName) == vars.end())
+            if(vars.find(secondVarName) == vars.end()) //if second variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of MULTIPLY operator"));
@@ -651,19 +657,19 @@ void Checker::DIVISE(string line) //division
         Variable tmp_variable2;
 
         size_t operatorPosition = line.find(DIVISE_OPERATOR);
-        string firstVarName = line.substr(0, operatorPosition);
+        string firstVarName = line.substr(0, operatorPosition); //getting first variable's name
         firstVarName = trim(firstVarName);
 
-        string secondVarName = line.substr(firstVarName.size()+DIVISE_OPERATOR.size()+1);
+        string secondVarName = line.substr(firstVarName.size()+DIVISE_OPERATOR.size()+1); //getting second variable's name
         secondVarName = trim(secondVarName);
 
-        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end()))
+        if((vars.find(firstVarName) != vars.end()) && (vars.find(secondVarName) != vars.end())) //if first variable is declared and have a value and second operand is declared variable with a value
         {
             if(firstVarName == secondVarName)
             {
                 Variable tmp_variable = vars[firstVarName];
 
-                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+                if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
@@ -674,14 +680,14 @@ void Checker::DIVISE(string line) //division
                 Variable tmp_variable = vars[firstVarName];
                 Variable tmp_variable2 = vars[secondVarName];
 
-                if(tmp_variable.getType() != tmp_variable2.getType())
+                if(tmp_variable.getType() != tmp_variable2.getType()) //if types of variables do not match
                 {
                     isOK = false;
                     errors.push_back(errorException(line, "Types of variables '" + firstVarName + "' and '" + secondVarName + "' do not match"));
                 }
             }
         }
-        else if(isNum(secondVarName))
+        else if(isNum(secondVarName)) //if second operand is number
         {
             stringstream convert(secondVarName);
             double plusVal = 0;
@@ -690,23 +696,23 @@ void Checker::DIVISE(string line) //division
 
             Variable tmp_variable = vars[firstVarName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
         }
-        else
+        else //something else
         {
             isOK = false;
 
-            if(vars.find(firstVarName) == vars.end())
+            if(vars.find(firstVarName) == vars.end()) //if first variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + firstVarName + "'"));
-            if(vars.find(secondVarName) == vars.end())
+            if(vars.find(secondVarName) == vars.end()) //if second variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + secondVarName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of DIVISE operator"));
@@ -718,29 +724,29 @@ void Checker::INCREMENT(string line) //increment
     try
     {
         size_t operatorPosition = line.find(INCREMENT_OPERATOR);
-        string varName = line.substr(0, operatorPosition);
+        string varName = line.substr(0, operatorPosition); //getting variable's name
         varName = trim(varName);
 
-        if(vars.find(varName) != vars.end())
+        if(vars.find(varName) != vars.end()) //if variable is declared and have a value
         {
             Variable tmp_variable = vars[varName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
 
         }
-        else if(vars.find(varName) == vars.end())
+        else if(vars.find(varName) == vars.end()) //if variable is undeclared
         {
             isOK = false;
 
-            if(vars.find(varName) == vars.end())
+            if(vars.find(varName) == vars.end()) //if variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of increment operator"));
@@ -752,29 +758,29 @@ void Checker::DECREMENT(string line) //decrement
     try
     {
         size_t operatorPosition = line.find(DECREMENT_OPERATOR);
-        string varName = line.substr(0, operatorPosition);
+        string varName = line.substr(0, operatorPosition); //getting variable's name
         varName = trim(varName);
 
-        if(vars.find(varName) != vars.end())
+        if(vars.find(varName) != vars.end())  //if variable is declared and have a value
         {
             Variable tmp_variable = vars[varName];
 
-            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE)
+            if(tmp_variable.getType() != INTEGER && tmp_variable.getType() != DOUBLE) //if type of variable isn't INTEGER or double
             {
                 isOK = false;
                 errors.push_back(errorException(line, "You may not to do arithmetic operations with type '" + tmp_variable.getType() + "'"));
             }
 
         }
-        else if(vars.find(varName) == vars.end())
+        else if(vars.find(varName) == vars.end()) //if variable is undeclared
         {
             isOK = false;
 
-            if(vars.find(varName) == vars.end())
+            if(vars.find(varName) == vars.end()) //if variable is undeclared
                 errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
         }
     }
-    catch(std::out_of_range)
+    catch(std::out_of_range) //catch std::out_of_range
     {
         isOK = false;
         errors.push_back(errorException(line, "Invalid argument of decrement operator"));

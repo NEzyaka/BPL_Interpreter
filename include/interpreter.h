@@ -177,7 +177,7 @@ private:
             return true;
         else
         {
-            int buf = 0;
+            double buf = 0;
             stringstream convert(str);
             convert >> buf;
             return (buf != 0) ? true : false;

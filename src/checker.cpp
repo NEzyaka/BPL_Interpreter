@@ -34,7 +34,7 @@ string Checker::readCode(istream& in) //reading code from input stream
     return inputLine;
 }
 
-void Checker::declareVar(string &line)
+void Checker::declareVar(string &line) //declaring a var
 {
     bool varDeclaration = false;
     string varType = "";
@@ -66,7 +66,7 @@ void Checker::declareVar(string &line)
 
         size_t equalSignPosition = line.find('=');
 
-        if(equalSignPosition != string::npos)
+        if(equalSignPosition != string::npos) //if eqal sign found
         {
             string varName = line.substr(varType.size(), equalSignPosition - varType.size());
             varName = trim(varName);
@@ -139,7 +139,7 @@ void Checker::declareVar(string &line)
     }
 }
 
-void Checker::checkBlock(vector<string>block)
+void Checker::checkBlock(vector<string>block) //checking a block
 {
     for(auto line = block.begin(); line != block.end(); line++)
     {
@@ -154,7 +154,7 @@ void Checker::checkBlock(vector<string>block)
                 inNormalIf = false;
                 inElse = true;
             }
-            else if(*line == ENDIF)
+            if(*line == ENDIF)
             {
                 inIf = false;
                 inNormalIf = false;
@@ -175,14 +175,13 @@ void Checker::checkBlock(vector<string>block)
             {
                 if(line->find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
                 {
-                    size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT);
+                    size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT); //cpmment a line
                     *line = line->substr(0, commentFind);
                 }
 
                 if((line->find(INTEGER) != string::npos) || (line->find(LINE) != string::npos) || (line->find(BOOL) != string::npos) || (line->find(DOUBLE) != string::npos))
-                    declareVar(*line); //declare var
-                else
-                    checkOperator(*line);
+                    declareVar(*line); //declare a var
+                else checkOperator(*line);
             }
     }
 }
