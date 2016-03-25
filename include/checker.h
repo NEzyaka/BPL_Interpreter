@@ -40,12 +40,13 @@ class Checker
 {
 private:
     bool isOK;
+    string filename;
 
     typedef const string keyword;
     //blocks
     keyword BEGINBLOCK = "beginblock"; //keywords
     keyword ENDBLOCK = "endblock";
-    keyword MAINBLOCK = "MAIN";
+    keyword STARTBLOCK = "start";
     map<string, vector<string> >blocks; //arrays
     vector<string>blockNames;
     vector<string>currentBlock;
@@ -211,10 +212,11 @@ private:
         string message;
     };
 public:
-    Checker(vector<string> c)
+    Checker(vector<string> c, string fn)
     {
         isOK = true;
         code = c;
+        filename = fn;
     }
     bool check(); //checker
     vector<errorException>errors;

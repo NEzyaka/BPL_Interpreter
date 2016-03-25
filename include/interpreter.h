@@ -42,6 +42,7 @@ public:
     void interpret(); //interprter
     void getKeyboardCode(); //getting code from keyboard
     string filename; //name of file
+    bool isIDE = false;
 
 private:
     bool fileIsEmpty = true;
@@ -56,7 +57,7 @@ private:
     //blocks
     keyword BEGINBLOCK = "beginblock"; //keywords
     keyword ENDBLOCK = "endblock";
-    keyword MAIN_BLOCK = "MAIN";
+    keyword STARTBLOCK = "start";
     map<string, vector<string> >blocks; //arrays
     vector<string>blockNames;
     vector<string>currentBlock;

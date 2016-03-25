@@ -218,12 +218,6 @@ void Interpreter::doBlock(vector<string>block) //do a block
 
         if(execute)
         {
-            if(line->find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
-            {
-                size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT);
-                *line = line->substr(0, commentFind);
-            }
-
             if((line->find(INTEGER) != string::npos) || (line->find(LINE) != string::npos) || (line->find(BOOL) != string::npos) || (line->find(DOUBLE) != string::npos))
                 declareVar(*line); //declare a var
             else doOperator(*line); //do an operator
@@ -283,9 +277,15 @@ void Interpreter::doOperator(string line) //do an operator
 
 void Interpreter::makeBlocks(vector<string>code) //create blocks
 {
-    for(auto line = code.begin(); line != code.end(); line++)
+    /*for(auto line = code.begin(); line != code.end(); line++)
     {
-        if(line->find(IMPORT_OPERATOR) != string::npos) //IMPORT
+        if(line->find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
+        {
+            size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT);
+            *line = line->substr(0, commentFind);
+        }
+
+        if(line->find(IMPORT_OPERATOR) != string::npos) //import
             IMPORT(*line);
 
         if(line->find(BEGINBLOCK) != string::npos)
@@ -311,7 +311,7 @@ void Interpreter::makeBlocks(vector<string>code) //create blocks
                 blocks.erase(blocks.find(blockName));
             blocks.insert(pair<string, vector<string> > (blockName, currentBlock)); //insert current block to array
         }
-    }
+    }*/
 }
 
 void Interpreter::interpret() //interpreter
@@ -324,7 +324,7 @@ void Interpreter::interpret() //interpreter
     case 0: //if file is empty
         break;
     default: //if file contains code
-        Checker checker(code); //check file for syntax errors
+        Checker checker(code, filename); //check file for syntax errors
 
         switch(checker.check())
         {
@@ -334,11 +334,47 @@ void Interpreter::interpret() //interpreter
 
             srand(time(0));
 
-            makeBlocks(code); //create blocks
+            //makeBlocks(code);
 
-            doBlock(blocks.find(MAIN_BLOCK)->second); //run MAIN block
+            for(unsigned i = 0; i < code.size(); i++) //temporality workaround for import operator
+            {
+                if(code[i].find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
+                {
+                    size_t commentFind = code[i].find_first_of(SINGLE_LINE_COMMENT);
+                    code[i] = code[i].substr(0, commentFind);
+                }
 
-            cout << "\nRuntime: " << clock()/1000.0 << " seconds. "; //show runtime
+                if(code[i].find(IMPORT_OPERATOR) != string::npos) //IMPORT
+                    IMPORT(code[i]);
+
+                if(code[i].find(BEGINBLOCK) != string::npos)
+                {
+                    blockName = code[i].substr(BEGINBLOCK.size());
+                    blockName = trim(blockName);
+                    if(!blockName.empty())
+                    {
+                        inBlock = true;
+                        blockNames.push_back(blockName);
+                    }
+                }
+                else if(code[i] == ENDBLOCK)
+                {
+                    inBlock = false;
+                    currentBlock.clear();
+                }
+
+                if(inBlock)
+                {
+                    currentBlock.push_back(code[i]);
+                    if(blocks.find(blockName) != blocks.end())
+                        blocks.erase(blocks.find(blockName));
+                    blocks.insert(pair<string, vector<string> > (blockName, currentBlock));
+                }
+            }
+
+            doBlock(blocks.find(STARTBLOCK)->second); //run start block
+
+            isIDE ? cout << "\nRuntime: " << clock()/1000.0 << " seconds.\n\n" : cout << "\nRuntime: " << clock()/1000.0 << " seconds. "; //show runtime
             break;
         }
         case false: //if code contains syntax errors

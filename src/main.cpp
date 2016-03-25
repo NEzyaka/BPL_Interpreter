@@ -65,6 +65,7 @@ int main(int argc, char** argv)
     setlocale(0, ".65001"); //UTF-8 support
 
     Interpreter interpreter;
+    bool isIDE = false;
 
     if(argc >= 2) //one ore more arguments
     {
@@ -76,12 +77,18 @@ int main(int argc, char** argv)
         if(argc == 3) //two arguments
         {
             stringstream convert(argv[2]);
-            string arg = convert.str();
+            string subArg = convert.str();
 
-            if(arg == "-edit") //editing of file
+            if(subArg == "-edit") //editing of file
             {
                 interpreter.getKeyboardCode();
                 return 0;
+            }
+            else if(subArg == "-IDE")
+            {
+                isIDE = true;
+                interpreter.isIDE = true;
+                interpreter.interpret();
             }
         }
         else if(argc == 2) //one argument
@@ -100,8 +107,11 @@ int main(int argc, char** argv)
         interpreter.interpret();
     }
 
-    cout << "\nPress any key to exit...";
-    getch();
+    if(!isIDE)
+    {
+        cout << endl << "Press any key to exit...";
+        getch();
+    }
 
     return 0;
 }

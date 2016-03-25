@@ -52,7 +52,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('=')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -116,7 +116,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('!')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -180,7 +180,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('<')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -207,7 +207,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('>')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -234,7 +234,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('<')+1);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -263,7 +263,7 @@ void Checker::parseCondition(string &line)
 
                 Variable tmp_variable = vars[varName];
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -292,7 +292,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('=')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -356,7 +356,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('!')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -420,7 +420,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('<')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -447,7 +447,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('>')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -474,7 +474,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('<')+1);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -503,7 +503,7 @@ void Checker::parseCondition(string &line)
 
                 Variable tmp_variable = vars[varName];
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -528,8 +528,6 @@ void Checker::parseCondition(string &line)
             string firstCondition = condition.substr(condition.find_first_of('(')+1, condition.find_first_of(')')-1);
             string secondCondition = condition.substr(condition.find_last_of('(')+1, condition.find_last_of(')')-1);
             secondCondition = secondCondition.substr(0, secondCondition.size()-1);
-            bool firstIsTrue = false;
-            bool secondIsTrue = false;
 
             //first condition
             if(firstCondition.find_first_of('=') == firstCondition.find_last_of('=')-1)
@@ -540,7 +538,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('=')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -604,7 +602,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('!')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -668,7 +666,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('<')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -695,7 +693,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('>')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -722,7 +720,7 @@ void Checker::parseCondition(string &line)
                 string varValue = firstCondition.substr(firstCondition.find_first_of('<')+1);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -751,7 +749,7 @@ void Checker::parseCondition(string &line)
 
                 Variable tmp_variable = vars[varName];
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -780,7 +778,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('=')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -844,7 +842,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('!')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -908,7 +906,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('<')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -935,7 +933,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('>')+2);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -962,7 +960,7 @@ void Checker::parseCondition(string &line)
                 string varValue = secondCondition.substr(secondCondition.find_first_of('<')+1);
                 varValue = trim(varValue);
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -991,7 +989,7 @@ void Checker::parseCondition(string &line)
 
                 Variable tmp_variable = vars[varName];
 
-                if(vars.find(varName) != vars.end())
+                if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                 {
                     Variable tmp_variable = vars[varName];
 
@@ -1023,7 +1021,7 @@ void Checker::parseCondition(string &line)
                     string varValue = condition.substr(condition.find_first_of('=')+2);
                     varValue = trim(varValue);
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 
@@ -1073,7 +1071,7 @@ void Checker::parseCondition(string &line)
                             }
                         }
                     }
-                    else if(vars.find(varName) == vars.end())
+                    else if(vars.find(varName) == vars.end() && mustInputVars.find(varName) == mustInputVars.end())
                     {
                         isOK = false;
                         errors.push_back(errorException(line, "Undeclared variable '" + varName + "'"));
@@ -1087,7 +1085,7 @@ void Checker::parseCondition(string &line)
                     string varValue = condition.substr(condition.find_first_of('!')+2);
                     varValue = trim(varValue);
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 
@@ -1151,7 +1149,7 @@ void Checker::parseCondition(string &line)
                     string varValue = condition.substr(condition.find_first_of('<')+2);
                     varValue = trim(varValue);
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 
@@ -1178,7 +1176,7 @@ void Checker::parseCondition(string &line)
                     string varValue = condition.substr(condition.find_first_of('>')+2);
                     varValue = trim(varValue);
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 
@@ -1205,7 +1203,7 @@ void Checker::parseCondition(string &line)
                     string varValue = condition.substr(condition.find_first_of('<')+1);
                     varValue = trim(varValue);
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 
@@ -1234,7 +1232,7 @@ void Checker::parseCondition(string &line)
 
                     Variable tmp_variable = vars[varName];
 
-                    if(vars.find(varName) != vars.end())
+                    if(vars.find(varName) != vars.end() && mustInputVars.find(varName) != mustInputVars.end())
                     {
                         Variable tmp_variable = vars[varName];
 

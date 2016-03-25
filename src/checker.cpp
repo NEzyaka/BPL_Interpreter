@@ -143,103 +143,103 @@ void Checker::checkBlock(vector<string>block) //checking a block
 {
     for(auto line = block.begin(); line != block.end(); line++)
     {
-            //conditions
-            if(line->find(IF_BEGIN) != string::npos)
-            {
-                inIf = true;
-                parseCondition(*line);
-            }
-            else if(*line == ELSE)
-            {
-                inNormalIf = false;
-                inElse = true;
-            }
-            if(*line == ENDIF)
-            {
-                inIf = false;
-                inNormalIf = false;
-                inElse = false;
-            }
+        //conditions
+        if(line->find(IF_BEGIN) != string::npos)
+        {
+            inIf = true;
+            parseCondition(*line);
+        }
+        else if(*line == ELSE)
+        {
+            inNormalIf = false;
+            inElse = true;
+        }
+        if(*line == ENDIF)
+        {
+            inIf = false;
+            inNormalIf = false;
+            inElse = false;
+        }
 
-            if(inIf)
-            {
-                if(inNormalIf && trueCondition)
-                    execute = true;
-                else if(inElse && !trueCondition)
-                    execute = true;
-                else execute = false;
-            }
-            else execute = true;
+        if(inIf)
+        {
+            if(inNormalIf && trueCondition)
+                execute = true;
+            else if(inElse && !trueCondition)
+                execute = true;
+            else execute = false;
+        }
+        else execute = true;
 
-            if(execute)
-            {
-                if(line->find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
-                {
-                    size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT); //cpmment a line
-                    *line = line->substr(0, commentFind);
-                }
-
-                if((line->find(INTEGER) != string::npos) || (line->find(LINE) != string::npos) || (line->find(BOOL) != string::npos) || (line->find(DOUBLE) != string::npos))
-                    declareVar(*line); //declare a var
-                else checkOperator(*line);
-            }
+        if(execute)
+        {
+            if((line->find(INTEGER) != string::npos) || (line->find(LINE) != string::npos) || (line->find(BOOL) != string::npos) || (line->find(DOUBLE) != string::npos))
+                declareVar(*line); //declare a var
+            else checkOperator(*line);
+        }
     }
 }
 
 void Checker::checkOperator(string line)
 {
-        if(line.find(DUMP_OPERATOR) != string::npos) //DUMP
-            if(line.find(DUMPVAR_OPERATOR) != string::npos) //DUMPVAR
-                DUMPVAR(line);
-            else DUMP(); //DUMP
-        else if(line.find(PRINT_OPERATOR) != string::npos) //PRINT
-            PRINT(line);
-        else if(line.find(SETVAL_OPERATOR) != string::npos) //SETVAL
-            SETVAL(line);
-        else if(line.find(INPUTVAR_OPERATOR) != string::npos) //INPUTVAR
-            INPUTVAR(line);
-        else if(line.find(ALERT_OPERATOR) != string::npos) //ALERT
-            ALERT();
-        else if(line.find(NEXTLINE_OPERATOR) != string::npos) //NEXTLINE
-            NEXTLINE();
-        else if(line.find(CLEARSCREEN_OPERATOR) != string::npos) //CLEARSCREEN
-            CLEARSCREEN();
-        else if(line.find(COMMAND_OPERATOR) != string::npos) //COMMAND
-            COMMAND(line);
-        else if(line.find(COLOR_OPERATOR) != string::npos) //FONTCOLOR
-            FONTCOLOR(line);
-        else if(line.find(SWAP_OPERATOR) != string::npos) //SWAP
-            SWAP(line);
-        else if(line.find(DELETE_OPERATOR) != string::npos) //DELETE
-            DELETE(line);
-        else if(line.find(SIZE_OPERATOR) != string::npos) //SIZE
-            SIZE(line);
-        else if(line.find(DOBLOCK_OPERATOR) != string::npos) //DOBLOCK
-            DOBLOCK(line);
-        else if(line.find(BLOCKLIST_OPERATOR) != string::npos) //BLOCKLIST
-            BLOCKLIST();
-        else if(line.find(INVERT_OPERATOR) != string::npos) //INVERT
-            INVERT(line);
+    if(line.find(DUMP_OPERATOR) != string::npos) //DUMP
+        if(line.find(DUMPVAR_OPERATOR) != string::npos) //DUMPVAR
+            DUMPVAR(line);
+        else DUMP(); //DUMP
+    else if(line.find(PRINT_OPERATOR) != string::npos) //PRINT
+        PRINT(line);
+    else if(line.find(SETVAL_OPERATOR) != string::npos) //SETVAL
+        SETVAL(line);
+    else if(line.find(INPUTVAR_OPERATOR) != string::npos) //INPUTVAR
+        INPUTVAR(line);
+    else if(line.find(ALERT_OPERATOR) != string::npos) //ALERT
+        ALERT();
+    else if(line.find(NEXTLINE_OPERATOR) != string::npos) //NEXTLINE
+        NEXTLINE();
+    else if(line.find(CLEARSCREEN_OPERATOR) != string::npos) //CLEARSCREEN
+        CLEARSCREEN();
+    else if(line.find(COMMAND_OPERATOR) != string::npos) //COMMAND
+        COMMAND(line);
+    else if(line.find(COLOR_OPERATOR) != string::npos) //FONTCOLOR
+        FONTCOLOR(line);
+    else if(line.find(SWAP_OPERATOR) != string::npos) //SWAP
+        SWAP(line);
+    else if(line.find(DELETE_OPERATOR) != string::npos) //DELETE
+        DELETE(line);
+    else if(line.find(SIZE_OPERATOR) != string::npos) //SIZE
+        SIZE(line);
+    else if(line.find(DOBLOCK_OPERATOR) != string::npos) //DOBLOCK
+        DOBLOCK(line);
+    else if(line.find(BLOCKLIST_OPERATOR) != string::npos) //BLOCKLIST
+        BLOCKLIST();
+    else if(line.find(INVERT_OPERATOR) != string::npos) //INVERT
+        INVERT(line);
 
-        //arithmetic operations with vars
-        if(line.find(ADD_OPERATOR) != string::npos) //addition
-            ADD(line);
-        else if(line.find(SUBTRACT_OPERATOR) != string::npos) //subtraction
-            SUBTRACT(line);
-        else if(line.find(MULTIPLY_OPERATOR) != string::npos) //multiplication
-            MULTIPLY(line);
-        else if(line.find(DIVISE_OPERATOR) != string::npos) //division
-            DIVISE(line);
-        else if(line.find(INCREMENT_OPERATOR) != string::npos) //increment
-            INCREMENT(line);
-        else if(line.find(DECREMENT_OPERATOR) != string::npos) //decrement
-            DECREMENT(line);
+    //arithmetic operations with vars
+    if(line.find(ADD_OPERATOR) != string::npos) //addition
+        ADD(line);
+    else if(line.find(SUBTRACT_OPERATOR) != string::npos) //subtraction
+        SUBTRACT(line);
+    else if(line.find(MULTIPLY_OPERATOR) != string::npos) //multiplication
+        MULTIPLY(line);
+    else if(line.find(DIVISE_OPERATOR) != string::npos) //division
+        DIVISE(line);
+    else if(line.find(INCREMENT_OPERATOR) != string::npos) //increment
+        INCREMENT(line);
+    else if(line.find(DECREMENT_OPERATOR) != string::npos) //decrement
+        DECREMENT(line);
 }
 
 void Checker::makeBlocks(vector<string>code) //create blocks
 {
     for(auto line = code.begin(); line != code.end(); line++)
     {
+        if(line->find(SINGLE_LINE_COMMENT) != string::npos) //single-line comment
+        {
+            size_t commentFind = line->find_first_of(SINGLE_LINE_COMMENT); //cpmment a line
+            *line = line->substr(0, commentFind);
+        }
+
         if(line->find(IMPORT_OPERATOR) != string::npos) //IMPORT
             IMPORT(*line);
 
@@ -273,13 +273,13 @@ bool Checker::check() //checker
 {
     makeBlocks(code);
 
-    auto iter = blocks.find(MAINBLOCK);
-    if(iter != blocks.end()) //if MAIN block found
+    auto iter = blocks.find(STARTBLOCK);
+    if(iter != blocks.end()) //if start block found
         checkBlock(iter->second);
-    else //if MAIN block not found
+    else //if start block not found
     {
         isOK = false;
-        cout << "MAIN block not found!" << endl;
+        errors.push_back(errorException(filename, "Block 'start' not declared!"));
     }
 
     return isOK;
