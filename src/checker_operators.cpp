@@ -76,6 +76,13 @@ void Checker::INPUTVAR(string& line) //INPUTVAR
 
         if(!varName.empty())
         {
+            if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
+            {
+                varName = varName.substr(varName.find_last_of('"')+1);
+                varName = trim(varName);
+            }
+            else invitation = "";
+
             if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
             {
                 size_t andPosition = varName.find(AND);

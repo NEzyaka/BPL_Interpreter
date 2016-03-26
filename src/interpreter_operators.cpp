@@ -168,7 +168,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     string value = "";
 
                     if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
-                    else cout << invitation << ": ";
+                    else cout << invitation << " ";
 
                     getline(cin, value);
 
@@ -219,7 +219,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     string value = "";
 
                     if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
-                    else cout << invitation << ": ";
+                    else cout << invitation << " ";
 
                     getline(cin, value);
 
@@ -275,7 +275,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     string value = "";
 
                     if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
-                    else cout << invitation << ": ";
+                    else cout << invitation << " ";
 
                     getline(cin, value);
 
@@ -326,7 +326,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     string value = "";
 
                     if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable.getType() << ")': ";
-                    else cout << invitation << ": ";
+                    else cout << invitation << " ";
 
                     getline(cin, value);
 
@@ -384,7 +384,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 string value = "";
 
                 if(invitation == "") cout << "Enter value of '" << varName << "(" << varType << ")': ";
-                else cout << invitation << ": ";
+                else cout << invitation << " ";
 
                 getline(cin, value);
 
@@ -436,7 +436,7 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                 string value = "";
 
                 if(invitation == "") cout << "Enter value of '" << varName << "(" << tmp_variable.getType() << ")': ";
-                else cout << invitation << ": ";
+                else cout << invitation << " ";
 
                 getline(cin, value);
 
