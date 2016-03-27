@@ -133,28 +133,39 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 {
     string varName = line.substr(INPUTVAR_OPERATOR.size()); //getting variable's name
     varName = trim(varName);
-    string invitation;
 
     if(!varName.empty())
     {
-        if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
-        {
-            invitation = varName;
-            invitation = invitation.substr(invitation.find_first_of('"')+1);
-            invitation = invitation.substr(0, invitation.find_first_of('"'));
-            varName = varName.substr(varName.find_last_of('"')+1);
-            varName = trim(varName);
-        }
-        else invitation = "";
-
         if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
         {
+            string firstInvitation, secondInvitation;
+
             size_t andPosition = varName.find(AND);
             string firstVarName = varName.substr(0, andPosition); //getting first variable's name
             firstVarName = trim(firstVarName);
 
+            if(firstVarName.find_first_of('"') != firstVarName.find_last_of('"'))  //if argument contains custom invitation
+            {
+                firstInvitation = firstVarName;
+                firstInvitation = firstInvitation.substr(firstInvitation.find_first_of('"')+1);
+                firstInvitation = firstInvitation.substr(0, firstInvitation.find_first_of('"'));
+                firstVarName = firstVarName.substr(firstVarName.find_last_of('"')+1);
+                firstVarName = trim(firstVarName);
+            }
+            else firstInvitation = "";
+
             string secondVarName = varName.substr(andPosition+3); //getting second variable's name
             secondVarName = trim(secondVarName);
+
+            if(secondVarName.find_first_of('"') != secondVarName.find_last_of('"'))  //if argument contains custom invitation
+            {
+                secondInvitation = secondVarName;
+                secondInvitation = secondInvitation.substr(secondInvitation.find_first_of('"')+1);
+                secondInvitation = secondInvitation.substr(0, secondInvitation.find_first_of('"'));
+                secondVarName = secondVarName.substr(secondVarName.find_last_of('"')+1);
+                secondVarName = trim(secondVarName);
+            }
+            else secondInvitation = "";
 
             if(!firstVarName.empty() && !secondVarName.empty())
             {
@@ -167,8 +178,8 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
                     string value = "";
 
-                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
-                    else cout << invitation << " ";
+                    if(firstInvitation == "") cout << "Enter value of '" << firstVarName << "(" << varType << ")': ";
+                    else cout << firstInvitation << " ";
 
                     getline(cin, value);
 
@@ -218,8 +229,8 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable = vars[firstVarName];
                     string value = "";
 
-                    if(invitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
-                    else cout << invitation << " ";
+                    if(firstInvitation == "") cout << "Enter value of '" << firstVarName << "(" << tmp_variable.getType() << ")': ";
+                    else cout << firstInvitation << " ";
 
                     getline(cin, value);
 
@@ -274,8 +285,8 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
 
                     string value = "";
 
-                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
-                    else cout << invitation << " ";
+                    if(secondInvitation == "") cout << "Enter value of '" << secondVarName << "(" << varType << ")': ";
+                    else cout << secondInvitation << " ";
 
                     getline(cin, value);
 
@@ -325,8 +336,8 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
                     Variable tmp_variable = vars[secondVarName];
                     string value = "";
 
-                    if(invitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable.getType() << ")': ";
-                    else cout << invitation << " ";
+                    if(secondInvitation == "") cout << "Enter value of '" << secondVarName << "(" << tmp_variable.getType() << ")': ";
+                    else cout << secondInvitation << " ";
 
                     getline(cin, value);
 
@@ -375,6 +386,17 @@ void Interpreter::INPUTVAR(string& line) //INPUTVAR
         }
         else //only one variable
         {
+            string invitation;
+            if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
+            {
+                invitation = varName;
+                invitation = invitation.substr(invitation.find_first_of('"')+1);
+                invitation = invitation.substr(0, invitation.find_first_of('"'));
+                varName = varName.substr(varName.find_last_of('"')+1);
+                varName = trim(varName);
+            }
+            else invitation = "";
+
             if(mustInputVars.find(varName) != mustInputVars.end()) //if variable declared, but hasn't got a value
             {
                 string varType = mustInputVars[varName];

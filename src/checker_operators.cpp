@@ -72,25 +72,53 @@ void Checker::INPUTVAR(string& line) //INPUTVAR
     {
         string varName = line.substr(INPUTVAR_OPERATOR.size()); //getting variable's name
         varName = trim(varName);
-        string invitation;
 
         if(!varName.empty())
         {
-            if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
-            {
-                varName = varName.substr(varName.find_last_of('"')+1);
-                varName = trim(varName);
-            }
-            else invitation = "";
-
             if(varName.find(AND) != std::string::npos) //if argument contains AND (2 variables)
             {
                 size_t andPosition = varName.find(AND);
                 string firstVarName = varName.substr(0, andPosition); //getting first variable's name
                 firstVarName = trim(firstVarName);
 
+                if(firstVarName.find('"') != string::npos)
+                {
+                    if(firstVarName.find_first_of('"') != firstVarName.find_last_of('"'))  //if argument contains custom invitation
+                    {
+                        firstVarName = firstVarName.substr(firstVarName.find_last_of('"')+1);
+                        firstVarName = trim(firstVarName);
+                    }
+                    else if(firstVarName.find_first_of('"') == firstVarName.find_last_of('"')) //if argument contains only one "
+                    {
+                        isOK = false;
+
+                        if(firstVarName.substr(0, firstVarName.find_last_of(' ')).find("\"") == firstVarName.substr(0, firstVarName.find_last_of(' ')).size()-1)
+                            errors.push_back(errorException(line, "Expected '\"' at begin of invitation '" + firstVarName.substr(0, firstVarName.find_last_of(' ')-1) + "'"));
+                        else if(firstVarName.find("\"") == 0)
+                            errors.push_back(errorException(line, "Expected '\"' at end of invitation '" + firstVarName.substr(1, firstVarName.find_last_of(' ')-1) + "'"));
+                    }
+                }
+
                 string secondVarName = varName.substr(andPosition+3); //getting second variable's name
                 secondVarName = trim(secondVarName);
+
+                if(secondVarName.find('"') != string::npos)
+                {
+                    if(secondVarName.find_first_of('"') != secondVarName.find_last_of('"'))  //if argument contains custom invitation
+                    {
+                        secondVarName = secondVarName.substr(secondVarName.find_last_of('"')+1);
+                        secondVarName = trim(secondVarName);
+                    }
+                    else if(secondVarName.find_first_of('"') == secondVarName.find_last_of('"')) //if argument contains only one "
+                    {
+                        isOK = false;
+
+                        if(secondVarName.substr(0, secondVarName.find_last_of(' ')).find("\"") == secondVarName.substr(0, secondVarName.find_last_of(' ')).size()-1)
+                            errors.push_back(errorException(line, "Expected '\"' at begin of invitation '" + secondVarName.substr(0, secondVarName.find_last_of(' ')-1) + "'"));
+                        else if(secondVarName.find("\"") == 0)
+                            errors.push_back(errorException(line, "Expected '\"' at end of invitation '" + secondVarName.substr(1, secondVarName.find_last_of(' ')-1) + "'"));
+                    }
+                }
 
                 if(!firstVarName.empty() && !secondVarName.empty())
                 {
@@ -111,6 +139,12 @@ void Checker::INPUTVAR(string& line) //INPUTVAR
             }
             else //only one variable
             {
+                if(varName.find_first_of('"') != varName.find_last_of('"'))  //if argument contains custom invitation
+                {
+                    varName = varName.substr(varName.find_last_of('"')+1);
+                    varName = trim(varName);
+                }
+
                 if((mustInputVars.find(varName) == mustInputVars.end()) && (vars.find(varName) == vars.end())) //if variable is undeclared
                 {
                     isOK = false;
